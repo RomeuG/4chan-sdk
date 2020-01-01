@@ -20,6 +20,8 @@ include_directories(lib/json)
 
 include_directories(include)
 
+set(CMAKE_CXX_FLAGS " -O0 -ggdb3 -lxml++-3.0 -lxml2 -lglibmm-2.4 -lgobject-2.0 -lglib-2.0 -lsigc-2.0 -lcurl -lpthread")
+
 file(GLOB sources "src/*.cpp")
 
 add_library(4chansdk SHARED ${sources})
