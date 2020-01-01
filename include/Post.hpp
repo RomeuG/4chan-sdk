@@ -6,7 +6,7 @@
 #include <string>
 
 struct Post {
-    std::string postnumber;
+    int postnumber;
     std::string time;
     std::string name;
     std::string subject;
@@ -20,10 +20,13 @@ struct Post {
     std::string country;
     std::string country_name;
 
-    std::string replies;
-    std::string images;
-    std::string unique_ips;
-    std::string tail_size;
+    int bumplimit;
+    int imagelimit;
+
+    int replies;
+    int images;
+    int unique_ips;
+    int tail_size;
 
     Post();
     ~Post();
