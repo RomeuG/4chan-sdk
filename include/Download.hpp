@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <curl/curl.h>
+#include <filesystem>
 #include <string>
 
 namespace channer
@@ -74,12 +75,64 @@ auto download_json(const char* url) -> std::string
         return "";
     }
 
-	// TODO: check if all cleanup done
+    // TODO: check if all cleanup done
     curl_slist_free_all(headers);
     curl_easy_cleanup(curl_ctx);
 
     return buffer;
 }
+
+auto download_media(std::string& url, std::filesystem::path& path) -> bool
+{
+    // dirty hack because core is being dumped for
+    // no apparent reason if this is not done.
+    // stack smashing happens too.
+    // probably a problem with std::filesystem::path ?
+    std::string file = std::string(path.c_str());
+
+    auto fp = std::fopen(file.c_str(), "wb");
+    if (!fp) {
+        std::printf("ChannerSDK :: error :: Failed to create file on the disk: %d\n", errno);
+        return false;
+    }
+
+    auto curl_ctx = curl_easy_init();
+
+    curl_easy_setopt(curl_ctx, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl_ctx, CURLOPT_WRITEDATA, fp);
+    curl_easy_setopt(curl_ctx, CURLOPT_WRITEFUNCTION, curlcb_img);
+    curl_easy_setopt(curl_ctx, CURLOPT_FOLLOWLOCATION, 1);
+
+    CURLcode rc = curl_easy_perform(curl_ctx);
+    if (rc) {
+        std::printf("ChannerSDK :: error :: Failed to download: %s\n", url.c_str());
+
+        curl_easy_cleanup(curl_ctx);
+        std::fclose(fp);
+        return false;
+    }
+
+    auto res_code = 0;
+    curl_easy_getinfo(curl_ctx, CURLINFO_RESPONSE_CODE, &res_code);
+
+    if (!((res_code == 200 || res_code == 201))) {
+        std::printf("ChannerSDK :: error :: Response code: %d\n", res_code);
+
+        curl_easy_cleanup(curl_ctx);
+        std::fclose(fp);
+
+        // remove file because its useless
+        std::filesystem::remove(path);
+
+        return false;
+    }
+
+    curl_easy_cleanup(curl_ctx);
+    std::fclose(fp);
+
+    return true;
+}
+
 }
 
 #endif
