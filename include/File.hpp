@@ -4,16 +4,16 @@
 #include <string>
 
 struct File {
-    std::string filename;
-    std::string fileext;
-    std::string filew;
-    std::string fileh;
-    std::string filetw;
-    std::string fileth;
-    std::string tim;
-    std::string time;
+    std::string name;
+    std::string ext;
+    int w;
+    int h;
+    int tn_w;
+    int tn_h;
+    int tim;
+    int time;
     std::string md5;
-    std::string fsize;
+    int size;
 };
 
 #endif
