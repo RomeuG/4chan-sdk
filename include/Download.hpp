@@ -85,11 +85,11 @@ auto download_json(const char* url) -> std::string
 
 auto download_media(std::string& url, std::filesystem::path& path) -> bool
 {
-    // dirty hack because core is being dumped for
+    // NOTE: dirty hack because core is being dumped for
     // no apparent reason if this is not done.
     // stack smashing happens too.
     // probably a problem with std::filesystem::path ?
-    std::string file = std::string(path.c_str());
+    auto const file = std::string(path.c_str());
 
     auto fp = std::fopen(file.c_str(), "wb");
     if (!fp) {
@@ -104,7 +104,7 @@ auto download_media(std::string& url, std::filesystem::path& path) -> bool
     curl_easy_setopt(curl_ctx, CURLOPT_WRITEFUNCTION, curlcb_img);
     curl_easy_setopt(curl_ctx, CURLOPT_FOLLOWLOCATION, 1);
 
-    CURLcode rc = curl_easy_perform(curl_ctx);
+    auto const rc = curl_easy_perform(curl_ctx);
     if (rc) {
         std::printf("ChannerSDK :: error :: Failed to download: %s\n", url.c_str());
 
@@ -146,9 +146,9 @@ auto download_media_async_ff(std::string& url, std::filesystem::path& path) -> v
     std::async(std::launch::async, [&]() {
         auto success = download_media(url, path);
 
-		if (!success) {
-			std::printf("ChannerSDK :: error :: download from %s failed\n", url.c_str());
-		}
+        if (!success) {
+            std::printf("ChannerSDK :: error :: download from %s failed\n", url.c_str());
+        }
     });
 }
 }
