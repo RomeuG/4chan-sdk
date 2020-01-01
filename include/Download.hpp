@@ -58,7 +58,7 @@ auto download_json(const char* url) -> std::string
     curl_easy_setopt(curl_ctx, CURLOPT_URL, url);
     curl_easy_setopt(curl_ctx, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl_ctx, CURLOPT_FOLLOWLOCATION, 0L);
-    curl_easy_setopt(curl_ctx, CURLOPT_WRITEFUNCTION, curlcb_html);
+    curl_easy_setopt(curl_ctx, CURLOPT_WRITEFUNCTION, cb_curl_txt);
     curl_easy_setopt(curl_ctx, CURLOPT_WRITEDATA, &buffer);
 
     code = curl_easy_perform(curl_ctx);
@@ -101,7 +101,7 @@ auto download_media(std::string& url, std::filesystem::path& path) -> bool
 
     curl_easy_setopt(curl_ctx, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl_ctx, CURLOPT_WRITEDATA, fp);
-    curl_easy_setopt(curl_ctx, CURLOPT_WRITEFUNCTION, curlcb_img);
+    curl_easy_setopt(curl_ctx, CURLOPT_WRITEFUNCTION, cb_curl_bin);
     curl_easy_setopt(curl_ctx, CURLOPT_FOLLOWLOCATION, 1);
 
     auto const rc = curl_easy_perform(curl_ctx);
