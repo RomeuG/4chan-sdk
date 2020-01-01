@@ -1,10 +1,7 @@
-#include <Download.hpp>
-#include <Post.hpp>
-#include <Thread.hpp>
-#include <json.hpp>
+#include <Client.hpp>
 
 // TODO: finish this function
-static auto _get_post(nlohmann::json& post) -> Post
+auto _get_post(nlohmann::json& post) -> Post
 {
     Post post_obj;
 
@@ -19,7 +16,7 @@ static auto _get_post(nlohmann::json& post) -> Post
     return post_obj;
 }
 
-static auto _get_thread(nlohmann::json& thread) -> Thread
+auto _get_thread(nlohmann::json& thread) -> Thread
 {
     Thread thread_obj;
 
@@ -31,7 +28,7 @@ static auto _get_thread(nlohmann::json& thread) -> Thread
     return thread_obj;
 }
 
-static auto get_thread(std::string const& board, std::string const& thread) -> Thread
+auto get_thread(std::string const& board, std::string const& thread) -> Thread
 {
     auto website = "http://a.4cdn.org/" + board + "/thread/" + thread + ".json";
     auto download = channer::download_json(website.c_str());
