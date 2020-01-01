@@ -1,4 +1,5 @@
 #include <Client.hpp>
+#include <cstdio>
 
 #define GET_VAL(a, b, c, d) \
     if (!a[b].empty()) {    \
@@ -75,6 +76,8 @@ auto _get_post(nlohmann::json& post) -> Post
 auto _get_thread(nlohmann::json& thread) -> Thread
 {
     Thread thread_obj;
+
+    thread_obj.posts.reserve(thread["posts"].size());
 
     for (nlohmann::json& post : thread["posts"]) {
         auto post_info = _get_post(post);
