@@ -2,5 +2,8 @@
 
 Post::Post()
 {
+}
 
+Post::~Post()
+{
 }

@@ -2,5 +2,8 @@
 
 Thread::Thread()
 {
+}
 
+Thread::~Thread()
+{
 }
