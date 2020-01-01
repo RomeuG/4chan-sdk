@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <curl/curl.h>
 #include <filesystem>
+#include <future>
 #include <string>
 
 namespace channer
@@ -133,6 +134,23 @@ auto download_media(std::string& url, std::filesystem::path& path) -> bool
     return true;
 }
 
+auto download_json_async(const char* url) -> std::future<std::string>
+{
+    return std::async(std::launch::async, [&]() -> std::string {
+        return download_json(url);
+    });
+}
+
+auto download_media_async_ff(std::string& url, std::filesystem::path& path) -> void
+{
+    std::async(std::launch::async, [&]() {
+        auto success = download_media(url, path);
+
+		if (!success) {
+			std::printf("ChannerSDK :: error :: download from %s failed\n", url.c_str());
+		}
+    });
+}
 }
 
 #endif
