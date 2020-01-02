@@ -2,8 +2,10 @@
 #define _POST_HPP_
 
 #include <File.hpp>
+#include <Text.hpp>
 #include <optional>
 #include <string>
+#include <vector>
 
 struct Post {
     int postnumber = -1;
@@ -16,7 +18,7 @@ struct Post {
 
     int thread = -1;
     std::string id;
-    std::string text;
+    std::vector<Text> text;
     std::string country;
     std::string country_name;
 
