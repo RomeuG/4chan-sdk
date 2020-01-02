@@ -8,6 +8,7 @@ set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=modernize-*")
 
 include_directories(/usr/include/libxml2)
 include_directories(/usr/include/libxml++-3.0)
+include_directories(/usr/include/libxml++-3.0/libxml++)
 include_directories(/usr/lib/libxml++-3.0/include)
 
 include_directories(/usr/include/glibmm-2.4)
