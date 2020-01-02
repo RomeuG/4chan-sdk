@@ -2,8 +2,11 @@
 #define _CLIENT_HPP_
 
 #include <Download.hpp>
+#include <HtmlUtils.hpp>
 #include <Post.hpp>
+#include <Text.hpp>
 #include <Thread.hpp>
+#include <Utils.hpp>
 #include <json.hpp>
 
 auto _get_post(nlohmann::json& post) -> Post;
