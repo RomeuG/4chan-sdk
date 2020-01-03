@@ -51,7 +51,7 @@ auto __get_post_text(xmlpp::Element* element) -> std::vector<Text>
         auto sub_sibling = sibling->get_first_child();
 
         if (sibling->get_name() == "br") {
-            vec_text.emplace_back(Text(0, "\n"));
+            vec_text.emplace_back(Text(TextType::NEWLINE, "\n"));
         }
 
         if (sibling->get_name() == "text") {
@@ -60,20 +60,20 @@ auto __get_post_text(xmlpp::Element* element) -> std::vector<Text>
                 std::string sanitized = text->get_content();
                 channer::utils::replace(sanitized, "\n", "");
                 channer::utils::replace(sanitized, "\r", "");
-                vec_text.emplace_back(Text(1, sanitized));
+                vec_text.emplace_back(Text(TextType::PLAINTEXT, sanitized));
             }
         }
 
         while (sub_sibling) {
             if (sub_sibling->get_name() == "br") {
-                vec_text.emplace_back(Text(0, "\n"));
+                vec_text.emplace_back(Text(TextType::NEWLINE, "\n"));
             }
 
             if (sub_sibling->get_name() == "p") {
                 auto paragraph_element = reinterpret_cast<xmlpp::Element*>(sub_sibling);
                 if (paragraph_element) {
                     auto paragraph_text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
-                    vec_text.emplace_back(Text(1, paragraph_text->get_content()));
+                    vec_text.emplace_back(Text(TextType::PLAINTEXT, paragraph_text->get_content()));
                 }
             }
 
@@ -81,7 +81,7 @@ auto __get_post_text(xmlpp::Element* element) -> std::vector<Text>
                 auto italic_element = reinterpret_cast<xmlpp::Element*>(sub_sibling);
                 if (italic_element) {
                     auto italic_text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
-                    vec_text.emplace_back(Text(2, italic_text->get_content()));
+                    vec_text.emplace_back(Text(TextType::ITALICS, italic_text->get_content()));
                 }
             }
 
@@ -91,15 +91,14 @@ auto __get_post_text(xmlpp::Element* element) -> std::vector<Text>
                     std::string sanitized = text->get_content();
                     channer::utils::replace(sanitized, "\n", "");
                     channer::utils::replace(sanitized, "\r", "");
-                    vec_text.emplace_back(Text(1, sanitized));
+                    vec_text.emplace_back(Text(TextType::PLAINTEXT, sanitized));
                 }
             }
 
             if (sub_sibling->get_name() == "a") {
                 auto link_text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
                 if (link_text) {
-                    //post += link_text->get_content();
-                    vec_text.emplace_back(Text(3, link_text->get_content()));
+                    vec_text.emplace_back(Text(TextType::LINK, link_text->get_content()));
                 }
 
                 auto link = reinterpret_cast<xmlpp::Element*>(sub_sibling);
@@ -115,7 +114,7 @@ auto __get_post_text(xmlpp::Element* element) -> std::vector<Text>
             if (sub_sibling->get_name() == "span") {
                 auto quote = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
                 if (quote) {
-                    vec_text.emplace_back(Text(4, quote->get_content()));
+                    vec_text.emplace_back(Text(TextType::QUOTE, quote->get_content()));
                 }
             }
 

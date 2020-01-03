@@ -3,11 +3,19 @@
 
 #include <string>
 
+enum TextType {
+    NEWLINE = 0,
+    PLAINTEXT,
+    ITALICS,
+    LINK,
+    QUOTE
+};
+
 struct Text {
-    int type;
+    TextType type;
     std::string text;
 
-    Text(int type, std::string text);
+    Text(TextType type, std::string text);
     ~Text();
 };
 

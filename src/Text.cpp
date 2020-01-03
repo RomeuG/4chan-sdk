@@ -1,6 +1,6 @@
 #include <Text.hpp>
 
-Text::Text(int type, std::string text) :
+Text::Text(TextType type, std::string text) :
     type(type), text(text)
 {
 }
