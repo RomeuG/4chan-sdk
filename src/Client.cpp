@@ -160,7 +160,6 @@ auto _get_post_text(nlohmann::json& post) -> std::vector<Text>
     return text_list;
 }
 
-// TODO: finish this function
 auto _get_post(nlohmann::json& post, std::string const& board) -> Post
 {
     Post post_obj;
@@ -257,9 +256,10 @@ auto get_media(std::string const& url, std::string const& thread, long long cons
     }
 }
 
-auto get_media(std::string const& url, int const thread, long long const tim, std::string const& extension) -> void
+auto get_media(std::string const& url, int const thread, long long const tim, std::string const& extension) -> bool
 {
     auto t = std::to_string(thread);
+    auto res = true;
 
     if (!std::filesystem::exists(t)) {
         if (!std::filesystem::create_directory(t)) {
@@ -271,28 +271,59 @@ auto get_media(std::string const& url, int const thread, long long const tim, st
     absolute_path.append(std::to_string(tim) + extension);
 
     if (!std::filesystem::exists(absolute_path)) {
-        channer::download_media(url, absolute_path);
+        res = channer::download_media(url, absolute_path);
     }
+
+    return res;
 }
 
-auto get_images_from_thread(Thread thread) -> void
+auto get_images_from_thread(Thread const& thread) -> bool
 {
+    auto res = true;
+
     for (auto& post : thread.posts) {
         if (post.file.has_value()) {
             auto f = post.file.value();
-            get_media(f.url, thread.posts[0].postnumber, f.tim, f.ext);
+            res = get_media(f.url, thread.posts[0].postnumber, f.tim, f.ext);
         }
     }
+
+    return res;
 }
 
-auto get_images_from_thread(std::string const& board, std::string const& thread) -> void
+auto get_images_from_thread(std::string const& board, std::string const& thread) -> bool
 {
-    auto t = get_thread(board, thread);
+    auto res = true;
+    auto t = get_thread(board, thread, true);
 
     for (auto& post : t.posts) {
         if (post.file.has_value()) {
             auto f = post.file.value();
-            get_media(f.url, t.posts[0].postnumber, f.tim, f.ext);
+            res = get_media(f.url, t.posts[0].postnumber, f.tim, f.ext);
         }
+    }
+
+    return res;
+}
+
+auto get_images_from_thread(Thread const& thread, std::function<void(bool)> success, std::function<void(bool)> failure) -> void
+{
+    auto t = get_images_from_thread(thread);
+
+    if (t) {
+        success(t);
+    } else {
+        failure(t);
+    }
+}
+
+auto get_images_from_thread(std::string const& board, std::string const& thread, std::function<void(bool)> success, std::function<void(bool)> failure) -> void
+{
+    auto t = get_images_from_thread(board, thread);
+
+    if (t) {
+        success(t);
+    } else {
+        failure(t);
     }
 }
