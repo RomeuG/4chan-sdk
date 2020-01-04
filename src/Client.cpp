@@ -18,7 +18,7 @@
         c = -1;              \
     }
 
-auto _get_file(nlohmann::json& post) -> File
+auto _get_file(nlohmann::json& post, std::string const& board) -> File
 {
     File file;
 
@@ -31,12 +31,15 @@ auto _get_file(nlohmann::json& post) -> File
     GET_VAL(post, "tn_w", file.tn_w, int);
     GET_VAL(post, "tn_h", file.tn_h, int);
 
-    GET_VAL(post, "tim", file.tim, int);
+    GET_VAL(post, "tim", file.tim, long long);
     GET_VAL(post, "time", file.time, int);
 
     GET_VAL(post, "md5", file.md5, std::string);
 
     GET_VAL(post, "fsize", file.size, int);
+
+    // build the full url
+    file.url = "http://i.4cdn.org/" + board + "/" + std::to_string(file.tim) + file.ext;
 
     return file;
 }
@@ -158,7 +161,7 @@ auto _get_post_text(nlohmann::json& post) -> std::vector<Text>
 }
 
 // TODO: finish this function
-auto _get_post(nlohmann::json& post) -> Post
+auto _get_post(nlohmann::json& post, std::string const& board) -> Post
 {
     Post post_obj;
 
@@ -173,7 +176,7 @@ auto _get_post(nlohmann::json& post) -> Post
     }
 
     if (!post["filename"].empty()) {
-        auto file_obj = _get_file(post);
+        auto file_obj = _get_file(post, board);
         post_obj.file = file_obj;
     }
 
@@ -190,14 +193,14 @@ auto _get_post(nlohmann::json& post) -> Post
     return post_obj;
 }
 
-auto _get_thread(nlohmann::json& thread) -> Thread
+auto _get_thread(nlohmann::json& thread, std::string const& board) -> Thread
 {
     Thread thread_obj;
 
     thread_obj.posts.reserve(thread["posts"].size());
 
     for (nlohmann::json& post : thread["posts"]) {
-        auto post_info = _get_post(post);
+        auto post_info = _get_post(post, board);
         thread_obj.posts.emplace_back(post_info);
     }
 
@@ -206,9 +209,69 @@ auto _get_thread(nlohmann::json& thread) -> Thread
 
 auto get_thread(std::string const& board, std::string const& thread) -> Thread
 {
-    auto website = "http://a.4cdn.org/" + board + "/thread/" + thread + ".json";
+    auto website = channer::endpoints::URL_THREAD + board + channer::endpoints::TYPE_THREAD + thread + channer::endpoints::FORMAT_JSON;
     auto download = channer::download_json(website.c_str());
 
+    if (download == "") {
+        return Thread();
+    }
+
     auto json = nlohmann::json::parse(download);
-    return _get_thread(json);
+    return _get_thread(json, board);
+}
+
+auto get_media(std::string const& url, std::string const& thread, long long const tim, std::string const& extension) -> void
+{
+    if (!std::filesystem::exists(thread)) {
+        if (!std::filesystem::create_directory(thread)) {
+            std::printf("Error creating directory.\n");
+        }
+    }
+
+    auto absolute_path = std::filesystem::absolute(thread);
+    absolute_path.append(std::to_string(tim) + extension);
+
+    if (!std::filesystem::exists(absolute_path)) {
+        channer::download_media(url, absolute_path);
+    }
+}
+
+auto get_media(std::string const& url, int const thread, long long const tim, std::string const& extension) -> void
+{
+    auto t = std::to_string(thread);
+
+    if (!std::filesystem::exists(t)) {
+        if (!std::filesystem::create_directory(t)) {
+            std::printf("Error creating directory.\n");
+        }
+    }
+
+    auto absolute_path = std::filesystem::absolute(t);
+    absolute_path.append(std::to_string(tim) + extension);
+
+    if (!std::filesystem::exists(absolute_path)) {
+        channer::download_media(url, absolute_path);
+    }
+}
+
+auto get_images_from_thread(Thread thread) -> void
+{
+    for (auto& post : thread.posts) {
+        if (post.file.has_value()) {
+            auto f = post.file.value();
+            get_media(f.url, thread.posts[0].postnumber, f.tim, f.ext);
+        }
+    }
+}
+
+auto get_images_from_thread(std::string const& board, std::string const& thread) -> void
+{
+    auto t = get_thread(board, thread);
+
+    for (auto& post : t.posts) {
+        if (post.file.has_value()) {
+            auto f = post.file.value();
+            get_media(f.url, t.posts[0].postnumber, f.tim, f.ext);
+        }
+    }
 }
