@@ -193,21 +193,42 @@ auto _get_post(nlohmann::json& post, std::string const& board) -> Post
     return post_obj;
 }
 
-auto _get_thread(nlohmann::json& thread, std::string const& board) -> Thread
+auto _get_post_file_only(nlohmann::json& post, std::string const& board) -> Post
+{
+    Post post_obj;
+
+    GET_VAL(post, "no", post_obj.postnumber, int);
+
+    if (!post["filename"].empty()) {
+        auto file_obj = _get_file(post, board);
+        post_obj.file = file_obj;
+    }
+
+    return post_obj;
+}
+
+auto _get_thread(nlohmann::json& thread, std::string const& board, bool file_only = false) -> Thread
 {
     Thread thread_obj;
 
     thread_obj.posts.reserve(thread["posts"].size());
 
     for (nlohmann::json& post : thread["posts"]) {
-        auto post_info = _get_post(post, board);
+        Post post_info;
+
+        if (file_only) {
+            post_info = _get_post_file_only(post, board);
+        } else {
+            post_info = _get_post(post, board);
+        }
+
         thread_obj.posts.emplace_back(post_info);
     }
 
     return thread_obj;
 }
 
-auto get_thread(std::string const& board, std::string const& thread) -> Thread
+auto get_thread(std::string const& board, std::string const& thread, bool file_only = false) -> Thread
 {
     auto website = channer::endpoints::URL_THREAD + board + channer::endpoints::TYPE_THREAD + thread + channer::endpoints::FORMAT_JSON;
     auto download = channer::download_json(website.c_str());
@@ -217,7 +238,7 @@ auto get_thread(std::string const& board, std::string const& thread) -> Thread
     }
 
     auto json = nlohmann::json::parse(download);
-    return _get_thread(json, board);
+    return _get_thread(json, board, file_only);
 }
 
 auto get_media(std::string const& url, std::string const& thread, long long const tim, std::string const& extension) -> void
