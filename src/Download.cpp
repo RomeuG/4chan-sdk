@@ -76,7 +76,7 @@ auto download_json(const char* url) -> std::string
     return buffer;
 }
 
-auto download_media(std::string& url, std::filesystem::path& path) -> bool
+auto download_media(std::string const& url, std::filesystem::path const& path) -> bool
 {
     // NOTE: dirty hack because core is being dumped for
     // no apparent reason if this is not done.

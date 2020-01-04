@@ -15,7 +15,7 @@ auto cb_curl_bin(void* data, size_t size, size_t nmemb, void* writer_data) -> st
 
 auto download_json(const char* url) -> std::string;
 
-auto download_media(std::string& url, std::filesystem::path& path) -> bool;
+auto download_media(std::string const& url, std::filesystem::path const& path) -> bool;
 
 auto download_json_async(const char* url) -> std::future<std::string>;
 
