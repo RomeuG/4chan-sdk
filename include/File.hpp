@@ -10,10 +10,12 @@ struct File {
     int h;
     int tn_w;
     int tn_h;
-    int tim;
+    long long tim;
     int time;
     std::string md5;
     int size;
+
+    std::string url;
 };
 
 #endif
