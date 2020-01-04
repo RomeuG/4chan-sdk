@@ -76,6 +76,18 @@ const std::unordered_map<std::string, std::string> chanlist{
     { "x", "https://boards.4channel.org/x/" },
     { "y", "https://boards.4chan.org/y/" },
 };
+
+namespace endpoints
+{
+    constexpr char URL_IMG[] = "http://i.4cdn.org/";
+    constexpr char URL_THREAD[] = "http://a.4cdn.org/";
+
+    constexpr char TYPE_THREAD[] = "/thread/";
+
+    constexpr char FORMAT_JSON[] = ".json";
+
+    constexpr char MEDIA[] = "http://i.4cdn.org/{board}/{tim}/{file}";
+}
 }
 
 #endif
