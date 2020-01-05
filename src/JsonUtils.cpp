@@ -72,6 +72,26 @@ auto _get_post_file_only(nlohmann::json& post, std::string const& board) -> Post
     return post_obj;
 }
 
+auto _get_catalog_entry(nlohmann::json& catalog) -> CatalogEntry
+{
+    CatalogEntry catalog_obj;
+    return catalog_obj;
+}
+
+auto _get_catalog(nlohmann::json& catalog) -> Catalog
+{
+    Catalog catalog_obj;
+
+    catalog_obj.catalog_entries.reserve(220);
+
+    for (nlohmann::json& page : catalog) {
+        for (nlohmann::json& entry : page["threads"]) {
+        }
+    }
+
+    return catalog_obj;
+}
+
 auto _get_thread(nlohmann::json& thread, std::string const& board, bool file_only) -> Thread
 {
     Thread thread_obj;
