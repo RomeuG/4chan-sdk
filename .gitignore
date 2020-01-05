@@ -3,3 +3,4 @@ build
 .vscode
 4chan-sdk.code-workspace
 compile_commands.json
+.clangd
