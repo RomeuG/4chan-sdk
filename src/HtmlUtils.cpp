@@ -17,3 +17,119 @@ auto convert_to_xmltree(std::string& buffer, htmlDocPtr* document, xmlNode** roo
 
     return true;
 }
+
+auto __get_post_text(xmlpp::Element* element) -> std::vector<Text>
+{
+    std::vector<Text> vec_text;
+
+    auto sibling = element->get_first_child();
+
+    while (sibling) {
+        auto sub_sibling = sibling->get_first_child();
+
+        if (sibling->get_name() == "br") {
+            vec_text.emplace_back(Text(TextType::NEWLINE, "\n"));
+        }
+
+        if (sibling->get_name() == "text") {
+            auto text = reinterpret_cast<xmlpp::TextNode*>(sibling);
+            if (text) {
+                std::string sanitized = text->get_content();
+                channer::utils::replace(sanitized, "\n", "");
+                channer::utils::replace(sanitized, "\r", "");
+                vec_text.emplace_back(Text(TextType::PLAINTEXT, sanitized));
+            }
+        }
+
+        while (sub_sibling) {
+            if (sub_sibling->get_name() == "br") {
+                vec_text.emplace_back(Text(TextType::NEWLINE, "\n"));
+            }
+
+            if (sub_sibling->get_name() == "p") {
+                auto paragraph_element = reinterpret_cast<xmlpp::Element*>(sub_sibling);
+                if (paragraph_element) {
+                    auto paragraph_text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
+                    vec_text.emplace_back(Text(TextType::PLAINTEXT, paragraph_text->get_content()));
+                }
+            }
+
+            if (sub_sibling->get_name() == "i") {
+                auto italic_element = reinterpret_cast<xmlpp::Element*>(sub_sibling);
+                if (italic_element) {
+                    auto italic_text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
+                    vec_text.emplace_back(Text(TextType::ITALICS, italic_text->get_content()));
+                }
+            }
+
+            if (sub_sibling->get_name() == "text") {
+                auto text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling);
+                if (text) {
+                    std::string sanitized = text->get_content();
+                    channer::utils::replace(sanitized, "\n", "");
+                    channer::utils::replace(sanitized, "\r", "");
+                    vec_text.emplace_back(Text(TextType::PLAINTEXT, sanitized));
+                }
+            }
+
+            if (sub_sibling->get_name() == "a") {
+                auto link_text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
+                if (link_text) {
+                    vec_text.emplace_back(Text(TextType::LINK, link_text->get_content()));
+                }
+
+                auto link = reinterpret_cast<xmlpp::Element*>(sub_sibling);
+                if (link && link_text) {
+                    auto href = link->get_attribute_value("href");
+
+                    if (href != link_text->get_content()) {
+                        // TODO: get href
+                    }
+                }
+            }
+
+            if (sub_sibling->get_name() == "span") {
+                auto quote = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
+                if (quote) {
+                    vec_text.emplace_back(Text(TextType::QUOTE, quote->get_content()));
+                }
+            }
+
+            sub_sibling = sub_sibling->get_next_sibling();
+        }
+
+        sibling = sibling->get_next_sibling();
+    }
+
+    return vec_text;
+}
+
+auto _get_post_text(nlohmann::json& post) -> std::vector<Text>
+{
+    std::vector<Text> text_list;
+
+    auto str = post["com"].get<std::string>();
+
+    htmlDocPtr doc = nullptr;
+    xmlNode* root = nullptr;
+
+    auto result = convert_to_xmltree(str, &doc, &root);
+    if (!result) {
+        std::printf("Failed converting into xmltree");
+        exit(EXIT_FAILURE);
+    }
+
+    auto root_element = std::make_unique<xmlpp::Element>(root);
+    auto body = root_element->find("//body");
+
+    if (body.empty()) {
+        return std::vector<Text>();
+    }
+
+    auto body_element = reinterpret_cast<xmlpp::Element*>(body[0]);
+    text_list = __get_post_text(body_element);
+
+    xmlFreeDoc(doc);
+
+    return text_list;
+}
