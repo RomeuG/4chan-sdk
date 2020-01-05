@@ -4,6 +4,7 @@
 #include <Constants.hpp>
 #include <Download.hpp>
 #include <HtmlUtils.hpp>
+#include <JsonUtils.hpp>
 #include <Post.hpp>
 #include <Text.hpp>
 #include <Thread.hpp>
