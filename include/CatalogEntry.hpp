@@ -20,6 +20,7 @@ struct CatalogEntry {
     std::vector<Text> text;
     std::optional<File> file;
 
+    int resto;
     std::string id;
     std::string capcode;
     std::string country;

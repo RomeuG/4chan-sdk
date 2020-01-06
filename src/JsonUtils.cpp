@@ -72,9 +72,42 @@ auto _get_post_file_only(nlohmann::json& post, std::string const& board) -> Post
     return post_obj;
 }
 
-auto _get_catalog_entry(nlohmann::json& catalog) -> CatalogEntry
+auto _get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> CatalogEntry
 {
     CatalogEntry catalog_obj;
+
+    GET_VAL(catalog, "no", catalog_obj.postnumber, int);
+    GET_VAL(catalog, "sticky", catalog_obj.sticky, int);
+    GET_VAL(catalog, "closed", catalog_obj.closed, int);
+    GET_VAL(catalog, "now", catalog_obj.now, std::string);
+    GET_VAL(catalog, "name", catalog_obj.name, std::string);
+    GET_VAL(catalog, "sub", catalog_obj.sub, std::string);
+
+    if (!catalog["com"].empty()) {
+        auto text_obj = _get_post_text(catalog);
+        catalog_obj.text = text_obj;
+    }
+
+    if (!catalog["filename"].empty()) {
+        auto file_obj = _get_file(catalog, board);
+        catalog_obj.file = file_obj;
+    }
+
+    GET_VAL(catalog, "resto", catalog_obj.resto, int);
+    GET_VAL(catalog, "id", catalog_obj.id, std::string);
+    GET_VAL(catalog, "capcode", catalog_obj.capcode, std::string);
+    GET_VAL(catalog, "country", catalog_obj.country, std::string);
+    GET_VAL(catalog, "bumplimit", catalog_obj.bumplimit, int);
+    GET_VAL(catalog, "imagelimit", catalog_obj.imagelimit, int);
+    GET_VAL(catalog, "semantic_url", catalog_obj.semantic_url, std::string);
+    GET_VAL(catalog, "country_name", catalog_obj.country_name, std::string);
+    GET_VAL(catalog, "replies", catalog_obj.replies, int);
+    GET_VAL(catalog, "images", catalog_obj.images, int);
+
+    // get last replies
+
+    GET_VAL(catalog, "last_modified", catalog_obj.last_modified, int);
+
     return catalog_obj;
 }
 
