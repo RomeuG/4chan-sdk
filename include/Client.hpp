@@ -15,6 +15,8 @@
 #include <string>
 
 auto get_catalog(std::string const& board) -> Catalog;
+auto get_catalog(std::string const& board, std::function<void(bool)> success, std::function<void(bool)> failure) -> void;
+
 auto get_thread(std::string const& board, std::string const& thread) -> Thread;
 auto get_images_from_thread_ff(std::string const& board, std::string const& thread) -> void;
 auto get_images_from_thread(std::string const& board, std::string const& thread, std::function<void(bool)> success, std::function<void(bool)> failure) -> void;

@@ -33,6 +33,7 @@ auto _get_post(nlohmann::json& post, std::string const& board) -> Post;
 auto _get_post_file_only(nlohmann::json& post, std::string const& board) -> Post;
 
 auto _get_catalog(nlohmann::json& catalog) -> Catalog;
+auto _get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog;
 
 auto _get_thread(nlohmann::json& thread, std::string const& board, bool file_only) -> Thread;
 

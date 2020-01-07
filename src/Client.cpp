@@ -24,7 +24,7 @@ auto get_catalog(std::string const& board) -> Catalog
     }
 
     auto json = nlohmann::json::parse(download);
-    return _get_catalog(json);
+    return _get_catalog(json, board);
 }
 
 static auto get_media(std::string const& url, std::string const& thread, long long const tim, std::string const& extension) -> void
@@ -141,4 +141,16 @@ auto get_images_from_thread(std::string const& board, std::string const& thread,
     } else {
         failure(t);
     }
+}
+
+auto get_catalog(std::string const& board, std::function<void(bool)> success, std::function<void(bool)> failure) -> void
+{
+    //std::async(std::launch::async, [&]() {
+    auto catalog = get_catalog(board);
+    if (!catalog.catalog_entries.empty()) {
+        success(true);
+    } else {
+        failure(false);
+    }
+    //});
 }

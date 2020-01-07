@@ -105,13 +105,19 @@ auto _get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> Ca
     GET_VAL(catalog, "images", catalog_obj.images, int);
 
     // get last replies
+    if (!catalog["last_replies"].empty()) {
+        for (nlohmann::json& reply : catalog["last_replies"]) {
+            auto post_obj = _get_post(reply, board);
+            catalog_obj.last_replies.emplace_back(post_obj);
+        }
+    }
 
     GET_VAL(catalog, "last_modified", catalog_obj.last_modified, int);
 
     return catalog_obj;
 }
 
-auto _get_catalog(nlohmann::json& catalog) -> Catalog
+auto _get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog
 {
     Catalog catalog_obj;
 
@@ -119,6 +125,8 @@ auto _get_catalog(nlohmann::json& catalog) -> Catalog
 
     for (nlohmann::json& page : catalog) {
         for (nlohmann::json& entry : page["threads"]) {
+            auto catalog_entry = _get_catalog_entry(catalog, board);
+            catalog_obj.catalog_entries.emplace_back(catalog_entry);
         }
     }
 
