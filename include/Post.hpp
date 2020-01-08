@@ -14,7 +14,7 @@ struct Post {
     std::string subject;
     std::string tripcode;
 
-    std::optional<File> file;
+    std::optional<File> file = std::nullopt;
 
     int thread = -1;
     std::string id;

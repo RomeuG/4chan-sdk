@@ -18,9 +18,9 @@ struct CatalogEntry {
     std::string sub;
 
     std::vector<Text> text;
-    std::optional<File> file;
+    std::optional<File> file = std::nullopt;
 
-    int resto;
+    int resto = -1;
     std::string id;
     std::string capcode;
     std::string country;
