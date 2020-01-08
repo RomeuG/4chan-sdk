@@ -103,6 +103,8 @@ auto _get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> Ca
     GET_VAL(catalog, "country_name", catalog_obj.country_name, std::string);
     GET_VAL(catalog, "replies", catalog_obj.replies, int);
     GET_VAL(catalog, "images", catalog_obj.images, int);
+	GET_VAL(catalog, "omitted_posts", catalog_obj.omitted_posts, int);
+	GET_VAL(catalog, "omitted_images", catalog_obj.omitted_images, int);
 
     // get last replies
     if (!catalog["last_replies"].empty()) {
@@ -125,7 +127,7 @@ auto _get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog
 
     for (nlohmann::json& page : catalog) {
         for (nlohmann::json& entry : page["threads"]) {
-            auto catalog_entry = _get_catalog_entry(catalog, board);
+            auto catalog_entry = _get_catalog_entry(entry, board);
             catalog_obj.catalog_entries.emplace_back(catalog_entry);
         }
     }
