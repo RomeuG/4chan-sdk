@@ -1,6 +1,8 @@
 #include <JsonUtils.hpp>
 
-auto _get_file(nlohmann::json& post, std::string const& board) -> File
+namespace channer::json
+{
+auto get_file(nlohmann::json& post, std::string const& board) -> File
 {
     File file;
 
@@ -26,7 +28,7 @@ auto _get_file(nlohmann::json& post, std::string const& board) -> File
     return file;
 }
 
-auto _get_post(nlohmann::json& post, std::string const& board) -> Post
+auto get_post(nlohmann::json& post, std::string const& board) -> Post
 {
     Post post_obj;
 
@@ -36,12 +38,12 @@ auto _get_post(nlohmann::json& post, std::string const& board) -> Post
     GET_VAL(post, "sub", post_obj.subject, std::string);
 
     if (!post["com"].empty()) {
-        auto text_obj = _get_post_text(post);
+        auto text_obj = channer::html::get_post_text(post);
         post_obj.text = text_obj;
     }
 
     if (!post["filename"].empty()) {
-        auto file_obj = _get_file(post, board);
+        auto file_obj = get_file(post, board);
         post_obj.file = file_obj;
     }
 
@@ -58,21 +60,21 @@ auto _get_post(nlohmann::json& post, std::string const& board) -> Post
     return post_obj;
 }
 
-auto _get_post_file_only(nlohmann::json& post, std::string const& board) -> Post
+auto get_post_file_only(nlohmann::json& post, std::string const& board) -> Post
 {
     Post post_obj;
 
     GET_VAL(post, "no", post_obj.postnumber, int);
 
     if (!post["filename"].empty()) {
-        auto file_obj = _get_file(post, board);
+        auto file_obj = get_file(post, board);
         post_obj.file = file_obj;
     }
 
     return post_obj;
 }
 
-auto _get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> CatalogEntry
+auto get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> CatalogEntry
 {
     CatalogEntry catalog_obj;
 
@@ -84,12 +86,12 @@ auto _get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> Ca
     GET_VAL(catalog, "sub", catalog_obj.sub, std::string);
 
     if (!catalog["com"].empty()) {
-        auto text_obj = _get_post_text(catalog);
+        auto text_obj = channer::html::get_post_text(catalog);
         catalog_obj.text = text_obj;
     }
 
     if (!catalog["filename"].empty()) {
-        auto file_obj = _get_file(catalog, board);
+        auto file_obj = get_file(catalog, board);
         catalog_obj.file = file_obj;
     }
 
@@ -103,13 +105,13 @@ auto _get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> Ca
     GET_VAL(catalog, "country_name", catalog_obj.country_name, std::string);
     GET_VAL(catalog, "replies", catalog_obj.replies, int);
     GET_VAL(catalog, "images", catalog_obj.images, int);
-	GET_VAL(catalog, "omitted_posts", catalog_obj.omitted_posts, int);
-	GET_VAL(catalog, "omitted_images", catalog_obj.omitted_images, int);
+    GET_VAL(catalog, "omitted_posts", catalog_obj.omitted_posts, int);
+    GET_VAL(catalog, "omitted_images", catalog_obj.omitted_images, int);
 
     // get last replies
     if (!catalog["last_replies"].empty()) {
         for (nlohmann::json& reply : catalog["last_replies"]) {
-            auto post_obj = _get_post(reply, board);
+            auto post_obj = get_post(reply, board);
             catalog_obj.last_replies.emplace_back(post_obj);
         }
     }
@@ -119,7 +121,7 @@ auto _get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> Ca
     return catalog_obj;
 }
 
-auto _get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog
+auto get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog
 {
     Catalog catalog_obj;
 
@@ -127,7 +129,7 @@ auto _get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog
 
     for (nlohmann::json& page : catalog) {
         for (nlohmann::json& entry : page["threads"]) {
-            auto catalog_entry = _get_catalog_entry(entry, board);
+            auto catalog_entry = get_catalog_entry(entry, board);
             catalog_obj.catalog_entries.emplace_back(catalog_entry);
         }
     }
@@ -135,7 +137,7 @@ auto _get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog
     return catalog_obj;
 }
 
-auto _get_thread(nlohmann::json& thread, std::string const& board, bool file_only) -> Thread
+auto get_thread(nlohmann::json& thread, std::string const& board, bool file_only) -> Thread
 {
     Thread thread_obj;
 
@@ -145,13 +147,15 @@ auto _get_thread(nlohmann::json& thread, std::string const& board, bool file_onl
         Post post_info;
 
         if (file_only) {
-            post_info = _get_post_file_only(post, board);
+            post_info = get_post_file_only(post, board);
         } else {
-            post_info = _get_post(post, board);
+            post_info = get_post(post, board);
         }
 
         thread_obj.posts.emplace_back(post_info);
     }
 
     return thread_obj;
+}
+
 }
