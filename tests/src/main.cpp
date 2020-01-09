@@ -4,32 +4,14 @@
 
 auto main() -> int
 {
-    //auto thread = get_thread("g", "74238065");
-
-    // get_catalog(
-    //     "g",
-    //     [](bool res) {
-    //         std::printf("Success\n");
-    //     },
-    //     [](bool res) {
-    //         std::printf("Failure\n");
-    //     });
-
-    // execute_request<Catalog>([]() -> Catalog { return Catalog(); },
-    //                          [](Catalog arg) {
-    //                              std::printf("Success\n");
-    //                          },
-    //                          []() {
-    //                              std::printf("Failure\n");
-    //                          });
-
-    execute_request<Catalog>([]() -> Catalog { return get_catalog("g"); },
-                             [](Catalog arg) {
-                                 std::printf("Success: %d\n", arg.catalog_entries.size());
-                             },
-                             []() {
-                                 std::printf("Failure\n");
-                             });
+    channer::get_catalog(
+        "g",
+        [](std::optional<Catalog> arg) {
+            std::printf("Success: %d\n", arg->catalog_entries.size());
+        },
+        [](std::exception const& e) {
+            std::printf("Failure: %s\n", e.what());
+        });
 
     return 0;
 }
