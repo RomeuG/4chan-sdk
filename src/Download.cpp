@@ -33,7 +33,8 @@ auto download_json(const char* url) -> std::string
     struct curl_slist* headers = nullptr;
 
     std::string buffer;
-    char curl_error_buffer[CURL_ERROR_SIZE];
+    // char curl_error_buffer[CURL_ERROR_SIZE];
+    std::array<char, CURL_ERROR_SIZE> curl_error_buffer{ 0 };
 
     curl_global_init(CURL_GLOBAL_DEFAULT);
 
@@ -47,7 +48,7 @@ auto download_json(const char* url) -> std::string
     // TODO: define headers in client api configuration
     headers = curl_slist_append(headers, "User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3724.8 Safari/537.36");
 
-    curl_easy_setopt(curl_ctx, CURLOPT_ERRORBUFFER, curl_error_buffer);
+    curl_easy_setopt(curl_ctx, CURLOPT_ERRORBUFFER, curl_error_buffer.data());
     curl_easy_setopt(curl_ctx, CURLOPT_URL, url);
     curl_easy_setopt(curl_ctx, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl_ctx, CURLOPT_FOLLOWLOCATION, 0L);

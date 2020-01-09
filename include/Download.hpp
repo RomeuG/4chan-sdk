@@ -1,6 +1,7 @@
 #ifndef _DOWNLOAD_HPP_
 #define _DOWNLOAD_HPP_
 
+#include <array>
 #include <cstdio>
 #include <curl/curl.h>
 #include <filesystem>
