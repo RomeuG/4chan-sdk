@@ -119,11 +119,11 @@ namespace channer
 //     }
 // }
 
-auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)> success, std::function<void(std::exception)> failure) -> void
+auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)> success, std::function<void(std::runtime_error)> failure) -> void
 {
     try {
         execute_request<Catalog>([&]() -> Catalog { return channer::repo::get_catalog(board); }, success, failure);
-    } catch (std::exception const& e) {
+    } catch (std::runtime_error const& e) {
         failure(e);
     }
 }

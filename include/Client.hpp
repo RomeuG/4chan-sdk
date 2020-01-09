@@ -50,15 +50,15 @@ constexpr auto execute_request(
         [success = std::forward<G>(success)](auto const&&... args) {
             success(std::forward<decltype(args)>(args)...);
         }(res.get());
-    } catch (std::exception const& e) {
+    } catch (std::runtime_error const& e) {
         [failure = std::forward<H>(failure), e]() {
-            failure(std::forward<std::exception const&>(e));
+            failure(std::forward<std::runtime_error const&>(e));
         }();
     }
 }
 
 auto get_catalog(std::string const& board) -> Catalog;
-auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)> success, std::function<void(std::exception)> failure) -> void;
+auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)> success, std::function<void(std::runtime_error)> failure) -> void;
 
 auto get_thread(std::string const& board, std::string const& thread) -> Thread;
 auto get_images_from_thread_ff(std::string const& board, std::string const& thread) -> void;

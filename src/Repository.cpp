@@ -8,7 +8,7 @@ auto get_thread(std::string const& board, std::string const& thread, bool file_o
     auto download = channer::download_json(website.c_str());
 
     if (download == "") {
-        return Thread();
+        throw std::runtime_error("Download error");
     }
 
     auto json = nlohmann::json::parse(download);
@@ -21,7 +21,7 @@ auto get_catalog(std::string const& board) -> Catalog
     auto download = channer::download_json(website.c_str());
 
     if (download == "") {
-        throw std::exception();
+        throw std::runtime_error("Download error");
     }
 
     auto json = nlohmann::json::parse(download);

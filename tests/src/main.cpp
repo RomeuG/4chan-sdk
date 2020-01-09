@@ -9,7 +9,7 @@ auto main() -> int
         [](std::optional<Catalog> arg) {
             std::printf("Success: %d\n", arg->catalog_entries.size());
         },
-        [](std::exception const& e) {
+        [](std::runtime_error const& e) {
             std::printf("Failure: %s\n", e.what());
         });
 
