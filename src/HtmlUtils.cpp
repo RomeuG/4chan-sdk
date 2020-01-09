@@ -1,5 +1,7 @@
 #include <HtmlUtils.hpp>
 
+namespace channer::html
+{
 auto convert_to_xmltree(std::string& buffer, htmlDocPtr* document, xmlNode** root) -> bool
 {
     *document = htmlReadMemory(buffer.c_str(), buffer.size(), nullptr, nullptr, HTML_PARSE_NOBLANKS | HTML_PARSE_NOERROR | HTML_PARSE_NOWARNING | HTML_PARSE_NONET);
@@ -18,7 +20,7 @@ auto convert_to_xmltree(std::string& buffer, htmlDocPtr* document, xmlNode** roo
     return true;
 }
 
-auto __get_post_text(xmlpp::Element* element) -> std::vector<Text>
+auto _get_post_text(xmlpp::Element* element) -> std::vector<Text>
 {
     std::vector<Text> vec_text;
 
@@ -104,7 +106,7 @@ auto __get_post_text(xmlpp::Element* element) -> std::vector<Text>
     return vec_text;
 }
 
-auto _get_post_text(nlohmann::json& post) -> std::vector<Text>
+auto get_post_text(nlohmann::json& post) -> std::vector<Text>
 {
     std::vector<Text> text_list;
 
@@ -127,9 +129,10 @@ auto _get_post_text(nlohmann::json& post) -> std::vector<Text>
     }
 
     auto body_element = reinterpret_cast<xmlpp::Element*>(body[0]);
-    text_list = __get_post_text(body_element);
+    text_list = _get_post_text(body_element);
 
     xmlFreeDoc(doc);
 
     return text_list;
+}
 }
