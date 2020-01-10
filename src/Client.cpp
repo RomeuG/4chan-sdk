@@ -119,13 +119,34 @@ namespace channer
 //     }
 // }
 
-	auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)> success, std::function<void(std::runtime_error)> failure) -> void
+auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)> success, std::function<void(std::runtime_error)> failure) -> void
 {
     try {
         execute_request<Thread>([&]() -> Thread {
             return channer::repo::get_thread(board, thread, false);
         },
                                 success, failure);
+    } catch (std::runtime_error const& e) {
+        failure(e);
+    }
+}
+
+auto get_thread_files(std::string const& board, std::string const& thread, std::function<void(std::vector<File>)> success, std::function<void(std::runtime_error)> failure) -> void
+{
+    try {
+        execute_request<std::vector<File>>([&]() -> std::vector<File> {
+            std::vector<File> files;
+            auto thread_obj = channer::repo::get_thread(board, thread, true);
+
+            std::for_each(std::begin(thread_obj.posts), std::end(thread_obj.posts), [&](Post const& post) {
+                if (post.file.has_value()) {
+                    files.emplace_back(post.file.value());
+                }
+            });
+
+            return files;
+        },
+                                           success, failure);
     } catch (std::runtime_error const& e) {
         failure(e);
     }
