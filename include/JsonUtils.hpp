@@ -10,22 +10,13 @@
 #include <json.hpp>
 #include <string>
 
-#define GET_VAL(a, b, c, d) \
-    if (!a[b].empty()) {    \
-        c = a[b].get<d>();  \
-    }
-
-#define GET_VAL_STR(a, b, c)         \
-    if (!a[b].empty()) {             \
-        c = a[b].get<std::string>(); \
-    }
-
-#define GET_VAL_INT(a, b, c) \
-    if (!a[b].empty()) {     \
-        c = a[b].get<int>(); \
-    } else {                 \
-        c = -1;              \
-    }
+template<typename T>
+constexpr auto GET_VAL(nlohmann::json & post, std::string const & key, T &data) -> void
+{
+	if (!post[key].empty()) {
+		data = post[key].get<T>();
+	}
+}
 
 namespace channer::json
 {
