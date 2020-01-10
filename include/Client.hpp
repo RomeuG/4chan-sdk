@@ -57,11 +57,8 @@ constexpr auto execute_request(
     }
 }
 
-auto get_catalog(std::string const& board) -> Catalog;
+auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)> success, std::function<void(std::runtime_error)> failure) -> void;
 auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)> success, std::function<void(std::runtime_error)> failure) -> void;
 
-auto get_thread(std::string const& board, std::string const& thread) -> Thread;
-auto get_images_from_thread_ff(std::string const& board, std::string const& thread) -> void;
-auto get_images_from_thread(std::string const& board, std::string const& thread, std::function<void(bool)> success, std::function<void(bool)> failure) -> void;
 }
 #endif

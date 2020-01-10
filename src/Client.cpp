@@ -119,10 +119,25 @@ namespace channer
 //     }
 // }
 
+	auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)> success, std::function<void(std::runtime_error)> failure) -> void
+{
+    try {
+        execute_request<Thread>([&]() -> Thread {
+            return channer::repo::get_thread(board, thread, false);
+        },
+                                success, failure);
+    } catch (std::runtime_error const& e) {
+        failure(e);
+    }
+}
+
 auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)> success, std::function<void(std::runtime_error)> failure) -> void
 {
     try {
-        execute_request<Catalog>([&]() -> Catalog { return channer::repo::get_catalog(board); }, success, failure);
+        execute_request<Catalog>([&]() -> Catalog {
+            return channer::repo::get_catalog(board);
+        },
+                                 success, failure);
     } catch (std::runtime_error const& e) {
         failure(e);
     }
