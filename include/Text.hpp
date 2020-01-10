@@ -16,7 +16,6 @@ struct Text {
     std::string text;
 
     Text(TextType type, std::string text);
-    ~Text();
 };
 
 #endif

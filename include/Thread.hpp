@@ -7,9 +7,6 @@
 struct Thread
 {
 	std::vector<Post> posts;
-
-	Thread();
-	~Thread();
 };
 
 #endif

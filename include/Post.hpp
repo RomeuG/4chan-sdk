@@ -32,9 +32,6 @@ struct Post {
     int images = -1;
     int unique_ips = -1;
     int tail_size = -1;
-
-    Post();
-    ~Post();
 };
 
 #endif
