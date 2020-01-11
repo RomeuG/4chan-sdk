@@ -119,7 +119,7 @@ namespace channer
 //     }
 // }
 
-auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)> success, std::function<void(std::runtime_error)> failure) -> void
+auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void
 {
     try {
         execute_request<Thread>([&]() -> Thread {
@@ -131,7 +131,7 @@ auto get_thread(std::string const& board, std::string const& thread, std::functi
     }
 }
 
-auto get_thread_files(std::string const& board, std::string const& thread, std::function<void(std::vector<File>)> success, std::function<void(std::runtime_error)> failure) -> void
+auto get_thread_files(std::string const& board, std::string const& thread, std::function<void(std::vector<File>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void
 {
     try {
         execute_request<std::vector<File>>([&]() -> std::vector<File> {
@@ -152,7 +152,7 @@ auto get_thread_files(std::string const& board, std::string const& thread, std::
     }
 }
 
-auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)> success, std::function<void(std::runtime_error)> failure) -> void
+auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void
 {
     try {
         execute_request<Catalog>([&]() -> Catalog {
