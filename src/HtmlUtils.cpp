@@ -34,7 +34,7 @@ auto _get_post_text(xmlpp::Element* element) -> std::vector<Text>
         }
 
         if (sibling->get_name() == "text") {
-            auto text = reinterpret_cast<xmlpp::TextNode*>(sibling);
+            auto text = dynamic_cast<xmlpp::TextNode*>(sibling);
             if (text) {
                 std::string sanitized = text->get_content();
                 channer::utils::replace(sanitized, "\n", "");
@@ -49,23 +49,23 @@ auto _get_post_text(xmlpp::Element* element) -> std::vector<Text>
             }
 
             if (sub_sibling->get_name() == "p") {
-                auto paragraph_element = reinterpret_cast<xmlpp::Element*>(sub_sibling);
+                auto paragraph_element = dynamic_cast<xmlpp::Element*>(sub_sibling);
                 if (paragraph_element) {
-                    auto paragraph_text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
+                    auto paragraph_text = dynamic_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
                     vec_text.emplace_back(Text(TextType::PLAINTEXT, paragraph_text->get_content()));
                 }
             }
 
             if (sub_sibling->get_name() == "i") {
-                auto italic_element = reinterpret_cast<xmlpp::Element*>(sub_sibling);
+                auto italic_element = dynamic_cast<xmlpp::Element*>(sub_sibling);
                 if (italic_element) {
-                    auto italic_text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
+                    auto italic_text = dynamic_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
                     vec_text.emplace_back(Text(TextType::ITALICS, italic_text->get_content()));
                 }
             }
 
             if (sub_sibling->get_name() == "text") {
-                auto text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling);
+                auto text = dynamic_cast<xmlpp::TextNode*>(sub_sibling);
                 if (text) {
                     std::string sanitized = text->get_content();
                     channer::utils::replace(sanitized, "\n", "");
@@ -75,12 +75,12 @@ auto _get_post_text(xmlpp::Element* element) -> std::vector<Text>
             }
 
             if (sub_sibling->get_name() == "a") {
-                auto link_text = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
+                auto link_text = dynamic_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
                 if (link_text) {
                     vec_text.emplace_back(Text(TextType::LINK, link_text->get_content()));
                 }
 
-                auto link = reinterpret_cast<xmlpp::Element*>(sub_sibling);
+                auto link = dynamic_cast<xmlpp::Element*>(sub_sibling);
                 if (link && link_text) {
                     auto href = link->get_attribute_value("href");
 
@@ -91,7 +91,7 @@ auto _get_post_text(xmlpp::Element* element) -> std::vector<Text>
             }
 
             if (sub_sibling->get_name() == "span") {
-                auto quote = reinterpret_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
+                auto quote = dynamic_cast<xmlpp::TextNode*>(sub_sibling->get_first_child());
                 if (quote) {
                     vec_text.emplace_back(Text(TextType::QUOTE, quote->get_content()));
                 }
@@ -128,7 +128,7 @@ auto get_post_text(nlohmann::json& post) -> std::vector<Text>
         return std::vector<Text>();
     }
 
-    auto body_element = reinterpret_cast<xmlpp::Element*>(body[0]);
+    auto body_element = dynamic_cast<xmlpp::Element*>(body[0]);
     text_list = _get_post_text(body_element);
 
     xmlFreeDoc(doc);
