@@ -40,4 +40,21 @@ auto get_boards() -> Boards
 	auto json = nlohmann::json::parse(download);
 	return channer::json::get_boards(json);
 }
+
+auto search_board() -> std::vector<Board>
+{
+	auto website = channer::endpoints::URL_THREAD + std::string("boards") + channer::endpoints::FORMAT_JSON;
+	auto download = channer::download_json(website.c_str());
+
+	if (download == "") {
+		throw std::runtime_error("Download error");
+	}
+
+	auto json = nlohmann::json::parse(download);
+	auto boards = channer::json::get_boards(json).boards;
+
+	auto found = std::find_if(std::begin(boards), std::end(boards), [&](Board const & board) {
+
+	});
+}
 }
