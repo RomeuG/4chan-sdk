@@ -4,7 +4,7 @@
 #include <CatalogEntry.hpp>
 
 struct Catalog {
-    std::vector<CatalogEntry> catalog_entries;
+    std::vector<CatalogEntry> entries;
 };
 
 #endif

@@ -10,7 +10,7 @@
 namespace channer::repo
 {
 auto get_thread(std::string const& board, std::string const& thread, bool file_only = false) -> Thread;
-auto get_catalog(std::string const& board) -> Catalog;
+auto get_catalog(std::string const& board, bool file_only = false) -> Catalog;
 }
 
 #endif

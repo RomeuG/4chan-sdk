@@ -128,17 +128,13 @@ auto get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> Cat
     return catalog_obj;
 }
 
-auto get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog
+auto get_catalog_entry_file_only(nlohmann::json& catalog, std::string const& board) -> CatalogEntry
 {
-    Catalog catalog_obj;
+    CatalogEntry catalog_obj;
 
-    catalog_obj.catalog_entries.reserve(220);
-
-    for (nlohmann::json& page : catalog) {
-        for (nlohmann::json& entry : page["threads"]) {
-            auto catalog_entry = get_catalog_entry(entry, board);
-            catalog_obj.catalog_entries.emplace_back(catalog_entry);
-        }
+    if (!catalog["filename"].empty()) {
+        auto file_obj    = get_file(catalog, board);
+        catalog_obj.file = file_obj;
     }
 
     return catalog_obj;
@@ -165,4 +161,24 @@ auto get_thread(nlohmann::json& thread, std::string const& board, bool file_only
     return thread_obj;
 }
 
+auto get_catalog(nlohmann::json& catalog, std::string const& board, bool file_only) -> Catalog
+{
+    Catalog catalog_obj;
+
+    catalog_obj.entries.reserve(220);
+
+    for (nlohmann::json& page : catalog) {
+        for (nlohmann::json& entry : page["threads"]) {
+			if (file_only) {
+				auto catalog_entry = get_catalog_entry_file_only(entry, board);
+				catalog_obj.entries.emplace_back(catalog_entry);
+			} else {
+				auto catalog_entry = get_catalog_entry(entry, board);
+				catalog_obj.entries.emplace_back(catalog_entry);
+			}
+        }
+    }
+
+    return catalog_obj;
+}
 }

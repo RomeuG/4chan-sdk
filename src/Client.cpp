@@ -163,4 +163,25 @@ auto get_catalog(std::string const& board, std::function<void(std::optional<Cata
         failure(e);
     }
 }
+
+auto get_catalog_files(std::string const& board, std::function<void(std::vector<File>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void
+{
+    try {
+        execute_request<std::vector<File>>([&]() -> std::vector<File> {
+            std::vector<File> files;
+            auto catalog_obj = channer::repo::get_catalog(board, true);
+
+            std::for_each(std::begin(catalog_obj.entries), std::end(catalog_obj.entries), [&](CatalogEntry const& entry) {
+                if (entry.file.has_value()) {
+                    files.emplace_back(entry.file.value());
+                }
+            });
+
+            return files;
+        },
+                                           success, failure);
+    } catch (std::runtime_error const& e) {
+        failure(e);
+    }
+}
 }

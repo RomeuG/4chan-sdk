@@ -25,7 +25,16 @@ auto main() -> int
     channer::get_catalog(
         "g",
         [](std::optional<Catalog> arg) {
-            std::printf("Success: %d\n", arg->catalog_entries.size());
+            std::printf("Success: %d\n", arg->entries.size());
+        },
+        [](std::runtime_error const& e) {
+            std::printf("Failure: %s\n", e.what());
+        });
+
+	channer::get_catalog_files(
+        "g",
+        [](std::vector<File> arg) {
+            std::printf("Success: %d\n", arg.size());
         },
         [](std::runtime_error const& e) {
             std::printf("Failure: %s\n", e.what());
