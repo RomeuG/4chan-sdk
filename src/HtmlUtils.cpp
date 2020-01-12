@@ -103,6 +103,8 @@ auto _get_post_text(xmlpp::Element* element) -> std::vector<Text>
         sibling = sibling->get_next_sibling();
     }
 
+	element->remove_node(element);
+
     return vec_text;
 }
 
@@ -122,13 +124,13 @@ auto get_post_text(nlohmann::json& post) -> std::vector<Text>
     }
 
     auto root_element = std::make_unique<xmlpp::Element>(root);
-    auto body = root_element->find("//body");
+    auto body = std::make_unique<xmlpp::Node::NodeSet>(root_element->find("//body"));
 
-    if (body.empty()) {
+    if (body->empty()) {
         return std::vector<Text>();
     }
 
-    auto body_element = dynamic_cast<xmlpp::Element*>(body[0]);
+    auto body_element = dynamic_cast<xmlpp::Element*>(body->at(0));
     text_list = _get_post_text(body_element);
 
     xmlFreeDoc(doc);
