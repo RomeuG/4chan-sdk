@@ -40,5 +40,13 @@ auto main() -> int
             std::printf("Failure: %s\n", e.what());
         });
 
+	channer::get_boards(
+        [](std::optional<Boards> arg) {
+            std::printf("Success: %d\n", arg->boards.size());
+        },
+        [](std::runtime_error const& e) {
+            std::printf("Failure: %s\n", e.what());
+        });
+
     return 0;
 }

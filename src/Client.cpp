@@ -184,4 +184,16 @@ auto get_catalog_files(std::string const& board, std::function<void(std::vector<
         failure(e);
     }
 }
+
+auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void
+{
+    try {
+        execute_request<Boards>([&]() -> Boards {
+            return channer::repo::get_boards();
+        },
+                                 success, failure);
+    } catch (std::runtime_error const& e) {
+        failure(e);
+    }
+}
 }

@@ -140,6 +140,13 @@ auto get_catalog_entry_file_only(nlohmann::json& catalog, std::string const& boa
     return catalog_obj;
 }
 
+auto get_board(nlohmann::json& board) -> Board
+{
+	Board board_obj;
+
+	return board_obj;
+}
+
 auto get_thread(nlohmann::json& thread, std::string const& board, bool file_only) -> Thread
 {
     Thread thread_obj;
@@ -180,5 +187,19 @@ auto get_catalog(nlohmann::json& catalog, std::string const& board, bool file_on
     }
 
     return catalog_obj;
+}
+
+auto get_boards(nlohmann::json& boards) -> Boards
+{
+	Boards boards_obj;
+
+	boards_obj.boards.reserve(100);
+
+	for (nlohmann::json& board : boards["boards"]) {
+		auto board_obj = get_board(board);
+		boards_obj.boards.emplace_back(board_obj);
+	}
+
+	return boards_obj;
 }
 }
