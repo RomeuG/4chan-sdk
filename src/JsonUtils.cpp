@@ -144,6 +144,42 @@ auto get_board(nlohmann::json& board) -> Board
 {
 	Board board_obj;
 
+	GET_VAL<std::string>(board, "board", board_obj.board);
+	GET_VAL<std::string>(board, "title", board_obj.title);
+
+	GET_VAL<int>(board, "ws_board", board_obj.ws_board);
+	GET_VAL<int>(board, "per_page", board_obj.per_page);
+	GET_VAL<int>(board, "pages", board_obj.pages);
+	GET_VAL<int>(board, "max_filesize", board_obj.max_filesize);
+	GET_VAL<int>(board, "max_webm_filesize", board_obj.max_webm_filesize);
+	GET_VAL<int>(board, "max_comment_char", board_obj.max_comment_char);
+	GET_VAL<int>(board, "max_webm_duration", board_obj.max_webm_duration);
+	GET_VAL<int>(board, "bump_limit", board_obj.bump_limit);
+	GET_VAL<int>(board, "image_limit", board_obj.image_limit);
+
+	if (!board["cooldowns"].empty()) {
+		board_obj.cooldowns.images = board["cooldowns"]["images"].get<int>();
+		board_obj.cooldowns.replies = board["cooldowns"]["replies"].get<int>();
+		board_obj.cooldowns.threads = board["cooldowns"]["threads"].get<int>();
+	}
+
+	GET_VAL<std::string>(board, "meta_description", board_obj.meta_description);
+
+	GET_VAL<int>(board, "user_ids", board_obj.user_ids);
+	GET_VAL<int>(board, "country_flags", board_obj.country_flags);
+	GET_VAL<int>(board, "forced_anon", board_obj.forced_anon);
+	GET_VAL<int>(board, "spoilers", board_obj.spoilers);
+	GET_VAL<int>(board, "custom_spoilers", board_obj.custom_spoilers);
+	GET_VAL<int>(board, "is_archived", board_obj.is_archived);
+	GET_VAL<int>(board, "require_subject", board_obj.require_subject);
+	GET_VAL<int>(board, "sjis_tags", board_obj.sjis_tags);
+	GET_VAL<int>(board, "oekaki", board_obj.oekaki);
+	GET_VAL<int>(board, "troll_flags", board_obj.troll_flags);
+	GET_VAL<int>(board, "webm_audio", board_obj.webm_audio);
+	GET_VAL<int>(board, "min_image_width", board_obj.min_image_width);
+	GET_VAL<int>(board, "min_image_height", board_obj.min_image_height);
+	GET_VAL<int>(board, "math_tags", board_obj.math_tags);
+
 	return board_obj;
 }
 
