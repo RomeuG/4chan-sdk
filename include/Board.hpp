@@ -37,8 +37,6 @@ struct Board
 	int min_image_width = -1;
 	int min_image_height = -1;
 	int math_tags = -1;
-
-	std::unordered_map<std::string, std::string> troll_flags_list;
 };
 
 #endif

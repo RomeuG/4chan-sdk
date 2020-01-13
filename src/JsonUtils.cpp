@@ -200,6 +200,10 @@ auto get_boards(nlohmann::json& boards) -> Boards
 		boards_obj.boards.emplace_back(board_obj);
 	}
 
+	for (auto& el : boards["troll_flags"].items()) {
+		boards_obj.troll_flags_list[el.key()] = el.value();
+	}
+
 	return boards_obj;
 }
 }

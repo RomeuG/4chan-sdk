@@ -7,6 +7,7 @@
 struct Boards
 {
 	std::vector<Board> boards;
+	std::unordered_map<std::string, std::string> troll_flags_list;
 };
 
 #endif
