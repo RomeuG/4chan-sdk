@@ -40,9 +40,20 @@ auto main() -> int
             std::printf("Failure: %s\n", e.what());
         });
 
-	channer::get_boards(
+    channer::get_boards(
         [](std::optional<Boards> arg) {
             std::printf("Success: %d\n", arg->boards.size());
+        },
+        [](std::runtime_error const& e) {
+            std::printf("Failure: %s\n", e.what());
+        });
+
+    Board b;
+    b.forced_anon = 1;
+    channer::search_board(
+        b,
+        [](std::vector<Board> arg) {
+            std::printf("Success: %d\n", arg.size());
         },
         [](std::runtime_error const& e) {
             std::printf("Failure: %s\n", e.what());

@@ -62,5 +62,6 @@ auto get_thread_files(std::string const& board, std::string const& thread, std::
 auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
 auto get_catalog_files(std::string const& board, std::function<void(std::vector<File>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
 auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
+auto search_board(Board &desired, std::function<void(std::vector<Board>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
 }
 #endif

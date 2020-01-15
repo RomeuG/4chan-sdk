@@ -196,4 +196,15 @@ auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::funct
         failure(e);
     }
 }
+
+auto search_board(Board &desired, std::function<void(std::vector<Board>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void
+{
+	try {
+		execute_request<std::vector<Board>>([&]() -> std::vector<Board> {
+				return channer::repo::search_board(desired);
+			}, success, failure);
+	} catch (std::runtime_error const& e) {
+		failure(e);
+	}
+}
 }
