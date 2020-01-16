@@ -14,4 +14,14 @@ auto replace(std::string& str, std::string_view const from, std::string_view con
         start_pos += to.length();
     }
 }
+
+auto load_file(std::string const& path) -> std::string
+{
+    std::ifstream infile{ path };
+    std::string file_contents{
+        std::istreambuf_iterator<char>(infile), std::istreambuf_iterator<char>()
+    };
+
+    return file_contents;
+}
 }

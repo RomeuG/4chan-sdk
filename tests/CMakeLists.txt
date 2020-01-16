@@ -8,7 +8,7 @@ set(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_CXX_CLANG_TIDY "clang-tidy;-checks=modernize-*")
 
 
-set(CMAKE_CXX_FLAGS "-ggdb3 -O0 -lxml++-3.0 -lxml2 -lglibmm-2.4 -lgobject-2.0 -lglib-2.0 -lsigc-2.0 -lcurl -lpthread -ltbb")
+set(CMAKE_CXX_FLAGS "-DMOCKDATA -ggdb3 -O0 -lxml++-3.0 -lxml2 -lglibmm-2.4 -lgobject-2.0 -lglib-2.0 -lsigc-2.0 -lcurl -lpthread -ltbb")
 
 include_directories(/usr/include/libxml2)
 include_directories(/usr/include/libxml++-3.0)
