@@ -17,6 +17,7 @@ auto get_thread(std::string const& board, std::string const& thread, bool file_o
 
 auto get_catalog(std::string const& board, bool file_only) -> Catalog
 {
+#ifndef MOCKDATA
     auto website = channer::endpoints::URL_THREAD + board + "/catalog" + channer::endpoints::FORMAT_JSON;
     auto download = channer::download_json(website.c_str());
 
@@ -26,6 +27,11 @@ auto get_catalog(std::string const& board, bool file_only) -> Catalog
 
     auto json = nlohmann::json::parse(download);
     return channer::json::get_catalog(json, board, file_only);
+#else
+    auto mock = channer::utils::load_file("../dummy/catalog-po.json");
+    auto json = nlohmann::json::parse(mock);
+    return channer::json::get_catalog(json, board, file_only);
+#endif
 }
 
 auto get_boards() -> Boards
@@ -41,7 +47,7 @@ auto get_boards() -> Boards
     auto json = nlohmann::json::parse(download);
     return channer::json::get_boards(json);
 #else
-	auto mock = channer::utils::load_file("../dummy/boards.json");
+    auto mock = channer::utils::load_file("../dummy/boards.json");
     auto json = nlohmann::json::parse(mock);
     return channer::json::get_boards(json);
 #endif
