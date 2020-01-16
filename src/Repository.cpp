@@ -79,7 +79,7 @@ auto search_board(Board const& desired) -> std::vector<Board>
         VALIDATE_OPTION(valid, pages);
         VALIDATE_OPTION(valid, max_filesize);
         VALIDATE_OPTION(valid, max_webm_filesize);
-        VALIDATE_OPTION(valid, max_comment_char);
+        VALIDATE_OPTION(valid, max_comment_chars);
         VALIDATE_OPTION(valid, max_webm_duration);
         VALIDATE_OPTION(valid, bump_limit);
         VALIDATE_OPTION(valid, image_limit);

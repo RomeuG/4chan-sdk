@@ -15,7 +15,7 @@ struct Board
 	int pages = -1;
 	int max_filesize = -1;
 	int max_webm_filesize = -1;
-	int max_comment_char = -1;
+	int max_comment_chars = -1;
 	int max_webm_duration = -1;
 	int bump_limit = -1;
 	int image_limit = -1;

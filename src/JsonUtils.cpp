@@ -152,7 +152,7 @@ auto get_board(nlohmann::json& board) -> Board
 	GET_VAL<int>(board, "pages", board_obj.pages);
 	GET_VAL<int>(board, "max_filesize", board_obj.max_filesize);
 	GET_VAL<int>(board, "max_webm_filesize", board_obj.max_webm_filesize);
-	GET_VAL<int>(board, "max_comment_char", board_obj.max_comment_char);
+	GET_VAL<int>(board, "max_comment_chars", board_obj.max_comment_chars);
 	GET_VAL<int>(board, "max_webm_duration", board_obj.max_webm_duration);
 	GET_VAL<int>(board, "bump_limit", board_obj.bump_limit);
 	GET_VAL<int>(board, "image_limit", board_obj.image_limit);
