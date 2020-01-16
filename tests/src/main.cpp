@@ -1,63 +1,36 @@
+#define CATCH_CONFIG_MAIN
+
 #include <Client.hpp>
 #include <Utils.hpp>
 #include <future>
+#include <catch.hpp>
 
-auto main() -> int
+TEST_CASE("Get all boards")
 {
-    channer::get_thread(
-        "g", "74261825",
-        [](std::optional<Thread> arg) {
-            std::printf("Success: %d\n", arg->posts.size());
-        },
-        [](std::runtime_error const& e) {
-            std::printf("Failure: %s\n", e.what());
-        });
-
-	channer::get_thread_files(
-        "g", "74261825",
-        [](std::vector<File> arg) {
-            std::printf("Success: %d\n", arg.size());
-        },
-        [](std::runtime_error const& e) {
-            std::printf("Failure: %s\n", e.what());
-        });
-
-    channer::get_catalog(
-        "g",
-        [](std::optional<Catalog> arg) {
-            std::printf("Success: %d\n", arg->entries.size());
-        },
-        [](std::runtime_error const& e) {
-            std::printf("Failure: %s\n", e.what());
-        });
-
-	channer::get_catalog_files(
-        "g",
-        [](std::vector<File> arg) {
-            std::printf("Success: %d\n", arg.size());
-        },
-        [](std::runtime_error const& e) {
-            std::printf("Failure: %s\n", e.what());
-        });
-
     channer::get_boards(
         [](std::optional<Boards> arg) {
-            std::printf("Success: %d\n", arg->boards.size());
+			SECTION("First board information is correct")
+			{
+				auto b = arg->boards[0];
+
+				REQUIRE(b.board == "3");
+				REQUIRE(b.title == "3DCG");
+				REQUIRE(b.ws_board == 1);
+				REQUIRE(b.per_page == 15);
+				REQUIRE(b.pages == 10);
+				REQUIRE(b.max_filesize == 4194304);
+				REQUIRE(b.max_webm_filesize == 3145728);
+				REQUIRE(b.max_comment_chars == 2000);
+				REQUIRE(b.max_webm_duration == 120);
+				REQUIRE(b.bump_limit == 310);
+				REQUIRE(b.image_limit == 150);
+				REQUIRE(b.cooldowns.threads == 600);
+				REQUIRE(b.cooldowns.replies == 60);
+				REQUIRE(b.cooldowns.images == 60);
+				REQUIRE(b.is_archived == 1);
+			}
         },
         [](std::runtime_error const& e) {
-            std::printf("Failure: %s\n", e.what());
-        });
 
-    Board b;
-    b.forced_anon = 1;
-    channer::search_board(
-        b,
-        [](std::vector<Board> arg) {
-            std::printf("Success: %d\n", arg.size());
-        },
-        [](std::runtime_error const& e) {
-            std::printf("Failure: %s\n", e.what());
         });
-
-    return 0;
-}
+};

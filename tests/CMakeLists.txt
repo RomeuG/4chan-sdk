@@ -24,6 +24,7 @@ include_directories(/usr/lib/glib-2.0/include)
 include_directories(
 	../include
 	../lib/json
+	../lib/catch2
 )
 
 file(GLOB sources "../src/*.cpp")
