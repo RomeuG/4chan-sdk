@@ -108,3 +108,32 @@ TEST_CASE("Get all boards")
 
         });
 };
+
+TEST_CASE("Get /po/ threads")
+{
+    channer::get_catalog("po",
+        [](std::optional<Catalog> arg) {
+			SECTION("First thread information is correct")
+            {
+				auto t = arg->entries.front();
+
+				REQUIRE(t.postnumber == 570368);
+				REQUIRE(t.sticky == 1);
+				REQUIRE(t.closed == 1);
+				REQUIRE(t.now == "12/31/18(Mon)17:05:48");
+				REQUIRE(t.name == "Anonymous");
+				REQUIRE(t.sub == "Welcome to /po/!");
+				REQUIRE(t.resto == 0);
+				REQUIRE(t.capcode == "mod");
+				REQUIRE(t.semantic_url == "welcome-to-po");
+				REQUIRE(t.replies == 2);
+				REQUIRE(t.images == 2);
+				REQUIRE(t.omitted_posts == 1);
+				REQUIRE(t.omitted_images == 1);
+				REQUIRE(t.last_modified == 1546294897);
+            }
+        },
+        [](std::runtime_error const& e) {
+
+        });
+};
