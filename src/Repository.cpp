@@ -55,16 +55,7 @@ auto get_boards() -> Boards
 
 auto search_board(Board const& desired) -> std::vector<Board>
 {
-    auto website = channer::endpoints::URL_THREAD + std::string("boards") + channer::endpoints::FORMAT_JSON;
-    auto download = channer::download_json(website.c_str());
-
-    if (download == "") {
-        throw std::runtime_error("Download error");
-    }
-
-    auto json = nlohmann::json::parse(download);
-    auto boards = channer::json::get_boards(json).boards;
-
+	auto boards = get_boards().boards;
     std::vector<Board> found;
 
     std::mutex m;
