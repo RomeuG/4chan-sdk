@@ -198,7 +198,7 @@ TEST_CASE("Search a board and get correct result")
     channer::search_board(
         desired,
         [](std::vector<Board> arg) {
-            SECTION("Fifth board information is correct")
+            SECTION("Desired board information is correct")
             {
                 auto b = arg[0];
 
@@ -217,6 +217,32 @@ TEST_CASE("Search a board and get correct result")
                 REQUIRE(b.cooldowns.replies == 60);
                 REQUIRE(b.cooldowns.images == 60);
                 REQUIRE(b.is_archived == 1);
+            }
+        },
+        [](std::runtime_error const& e) {
+        });
+}
+
+TEST_CASE("Search multiple boards and get correct results")
+{
+    auto desired = Board();
+    desired.require_subject = 1;
+
+    channer::search_board(
+        desired,
+        [](std::vector<Board> arg) {
+			REQUIRE(arg.size() == 3);
+
+            SECTION("Search result is correct")
+            {
+                auto b1 = arg[0];
+                auto b2 = arg[1];
+                auto b3 = arg[2];
+
+				// TODO: test race condition
+                REQUIRE(b1.board == "news");
+                REQUIRE(b2.board == "qst");
+                REQUIRE(b3.board == "vg");
             }
         },
         [](std::runtime_error const& e) {
