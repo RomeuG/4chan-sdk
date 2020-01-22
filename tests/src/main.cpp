@@ -9,6 +9,9 @@ TEST_CASE("Get all boards")
 {
     channer::get_boards(
         [](std::optional<Boards> arg) {
+			REQUIRE(arg->boards.size() == 72);
+			REQUIRE(arg->troll_flags_list.size() == 23);
+
             SECTION("First board information is correct")
             {
                 auto b = arg->boards.front();
@@ -114,6 +117,8 @@ TEST_CASE("Get /po/ threads")
     channer::get_catalog(
         "po",
         [](std::optional<Catalog> arg) {
+			REQUIRE(arg->entries.size() == 151);
+
             SECTION("First thread information is correct")
             {
                 auto t = arg->entries.front();
@@ -149,6 +154,41 @@ TEST_CASE("Get /po/ threads")
                 REQUIRE(t.omitted_posts == 1);
                 REQUIRE(t.omitted_images == 1);
                 REQUIRE(t.last_modified == 1546294897);
+            }
+
+			SECTION("Third thread information is correct")
+            {
+                auto t = arg->entries[2];
+
+                REQUIRE(t.postnumber == 579035);
+                REQUIRE(t.now == "01/16/20(Thu)05:17:09");
+                REQUIRE(t.name == "Anonymous");
+                REQUIRE(t.sub == "Voltron");
+				REQUIRE(t.text[0].text == "Templates to this?");
+
+                SECTION("Third thread file information is correct")
+                {
+                    auto f = t.file;
+
+                    REQUIRE(f->name == "14fda025162991.56342593032f0");
+                    REQUIRE(f->ext == ".jpg");
+                    REQUIRE(f->w == 600);
+                    REQUIRE(f->h == 750);
+                    REQUIRE(f->tn_w == 200);
+                    REQUIRE(f->tn_h == 250);
+                    REQUIRE(f->tim == 1579169829196ll);
+                    REQUIRE(f->time == 1579169829);
+                    REQUIRE(f->md5 == "kxe/jgFYRhBb8f/FdIMScA==");
+                    REQUIRE(f->size == 181179);
+                }
+
+                REQUIRE(t.resto == 0);
+                REQUIRE(t.bumplimit == 0);
+                REQUIRE(t.imagelimit == 0);
+                REQUIRE(t.semantic_url == "voltron");
+                REQUIRE(t.replies == 1);
+                REQUIRE(t.images == 1);
+                REQUIRE(t.last_modified == 1579170280);
             }
 
             SECTION("Last thread information is correct")
