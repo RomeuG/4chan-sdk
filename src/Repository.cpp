@@ -55,11 +55,15 @@ auto get_boards() -> Boards
 
 auto search_board(Board const& desired) -> std::vector<Board>
 {
-	auto boards = get_boards().boards;
+    auto boards = get_boards().boards;
     std::vector<Board> found;
 
     std::mutex m;
+#ifndef MOCKDATA
     std::for_each(std::execution::par_unseq, std::begin(boards), std::end(boards), [&](Board const& board) {
+#else
+    std::for_each(std::execution::seq, std::begin(boards), std::end(boards), [&](Board const& board) {
+#endif
         auto valid = false;
 
         VALIDATE_OPTION(valid, board);
