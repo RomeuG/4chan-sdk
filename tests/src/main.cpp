@@ -9,8 +9,8 @@ TEST_CASE("Get all boards")
 {
     channer::get_boards(
         [](std::optional<Boards> arg) {
-			REQUIRE(arg->boards.size() == 72);
-			REQUIRE(arg->troll_flags_list.size() == 23);
+            REQUIRE(arg->boards.size() == 72);
+            REQUIRE(arg->troll_flags_list.size() == 23);
 
             SECTION("First board information is correct")
             {
@@ -117,7 +117,7 @@ TEST_CASE("Get /po/ threads")
     channer::get_catalog(
         "po",
         [](std::optional<Catalog> arg) {
-			REQUIRE(arg->entries.size() == 151);
+            REQUIRE(arg->entries.size() == 151);
 
             SECTION("First thread information is correct")
             {
@@ -156,7 +156,7 @@ TEST_CASE("Get /po/ threads")
                 REQUIRE(t.last_modified == 1546294897);
             }
 
-			SECTION("Third thread information is correct")
+            SECTION("Third thread information is correct")
             {
                 auto t = arg->entries[2];
 
@@ -164,7 +164,7 @@ TEST_CASE("Get /po/ threads")
                 REQUIRE(t.now == "01/16/20(Thu)05:17:09");
                 REQUIRE(t.name == "Anonymous");
                 REQUIRE(t.sub == "Voltron");
-				REQUIRE(t.text[0].text == "Templates to this?");
+                REQUIRE(t.text[0].text == "Templates to this?");
 
                 SECTION("Third thread file information is correct")
                 {
@@ -271,7 +271,7 @@ TEST_CASE("Search multiple boards and get correct results")
     channer::search_board(
         desired,
         [](std::vector<Board> arg) {
-			REQUIRE(arg.size() == 3);
+            REQUIRE(arg.size() == 3);
 
             SECTION("Search result is correct")
             {
@@ -279,7 +279,6 @@ TEST_CASE("Search multiple boards and get correct results")
                 auto b2 = arg[1];
                 auto b3 = arg[2];
 
-				// TODO: test race condition
                 REQUIRE(b1.board == "news");
                 REQUIRE(b2.board == "qst");
                 REQUIRE(b3.board == "vg");

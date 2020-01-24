@@ -15,6 +15,7 @@ auto replace(std::string& str, std::string_view const from, std::string_view con
     }
 }
 
+#ifdef MOCKDATA
 auto load_file(std::string const& path) -> std::string
 {
     std::ifstream infile{ path };
@@ -24,4 +25,5 @@ auto load_file(std::string const& path) -> std::string
 
     return file_contents;
 }
+#endif
 }
