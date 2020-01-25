@@ -108,7 +108,7 @@ TEST_CASE("Get all boards")
             }
         },
         [](std::runtime_error const& e) {
-
+            std::printf("Exception: %s\n", e.what());
         });
 };
 
@@ -226,7 +226,7 @@ TEST_CASE("Get /po/ threads")
             }
         },
         [](std::runtime_error const& e) {
-
+            std::printf("Exception: %s\n", e.what());
         });
 };
 
@@ -260,6 +260,7 @@ TEST_CASE("Search a board and get correct result")
             }
         },
         [](std::runtime_error const& e) {
+            std::printf("Exception: %s\n", e.what());
         });
 }
 
@@ -285,5 +286,6 @@ TEST_CASE("Search multiple boards and get correct results")
             }
         },
         [](std::runtime_error const& e) {
+            std::printf("Exception: %s\n", e.what());
         });
 }
