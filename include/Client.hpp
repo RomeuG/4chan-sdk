@@ -21,7 +21,7 @@ template<typename T, typename F>
 auto execute_request(
     F&& request,
     std::function<void(T)> success,
-    std::function<void(std::exception)> failure) -> void
+    std::function<void(std::string const&)> failure) -> void
 {
     try {
         auto res = std::async(std::launch::async,
@@ -30,8 +30,10 @@ auto execute_request(
                               });
 
         success(res.get());
-    } catch (std::exception const& e) {
-        failure(e);
+    } catch (nlohmann::json::parse_error const& e) {
+        failure(e.what());
+    } catch (std::runtime_error const& e) {
+        failure(e.what());
     }
 }
 
@@ -50,18 +52,22 @@ constexpr auto execute_request(
         [success = std::forward<G>(success)](auto const&&... args) {
             success(std::forward<decltype(args)>(args)...);
         }(res.get());
+    } catch (nlohmann::json::parse_error const& e) {
+        [failure = std::forward<H>(failure), e]() {
+            failure(std::forward<std::string const>(e.what()));
+        }();
     } catch (std::runtime_error const& e) {
         [failure = std::forward<H>(failure), e]() {
-            failure(std::forward<std::runtime_error const&>(e));
+            failure(std::forward<std::string const>(e.what()));
         }();
     }
 }
 
-auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
-auto get_thread_files(std::string const& board, std::string const& thread, std::function<void(std::vector<File>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
-auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
-auto get_catalog_files(std::string const& board, std::function<void(std::vector<File>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
-auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
-auto search_board(Board &desired, std::function<void(std::vector<Board>)>&& success, std::function<void(std::runtime_error)>&& failure) -> void;
+auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+auto get_thread_files(std::string const& board, std::string const& thread, std::function<void(std::vector<File>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+auto get_catalog_files(std::string const& board, std::function<void(std::vector<File>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+auto search_board(Board const& desired, std::function<void(std::vector<Board>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 }
 #endif
