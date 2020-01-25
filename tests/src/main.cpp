@@ -107,8 +107,8 @@ TEST_CASE("Get all boards")
                 REQUIRE(tf["PC"] == "Hippie");
             }
         },
-        [](std::runtime_error const& e) {
-            std::printf("Exception: %s\n", e.what());
+        [](std::string const& e) {
+            std::printf("Exception: %s\n", e.c_str());
         });
 };
 
@@ -225,8 +225,8 @@ TEST_CASE("Get /po/ threads")
                 REQUIRE(t.last_modified == 1573900140);
             }
         },
-        [](std::runtime_error const& e) {
-            std::printf("Exception: %s\n", e.what());
+        [](std::string const& e) {
+            std::printf("Exception: %s\n", e.c_str());
         });
 };
 
@@ -259,8 +259,8 @@ TEST_CASE("Search a board and get correct result")
                 REQUIRE(b.is_archived == 1);
             }
         },
-        [](std::runtime_error const& e) {
-            std::printf("Exception: %s\n", e.what());
+        [](std::string const& e) {
+            std::printf("Exception: %s\n", e.c_str());
         });
 }
 
@@ -285,7 +285,7 @@ TEST_CASE("Search multiple boards and get correct results")
                 REQUIRE(b3.board == "vg");
             }
         },
-        [](std::runtime_error const& e) {
-            std::printf("Exception: %s\n", e.what());
+        [](std::string const& e) {
+            std::printf("Exception: %s\n", e.c_str());
         });
 }
