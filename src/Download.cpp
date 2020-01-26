@@ -58,7 +58,7 @@ auto download_json(const char* url) -> std::string
     code = curl_easy_perform(curl_ctx);
 
     if (code != CURLE_OK) {
-        std::printf("ChannerSDK :: error :: Failed to get '%s' [%s]\n", url, curl_error_buffer);
+        std::printf("ChannerSDK :: error :: Failed to get '%s' [%s]\n", url, curl_error_buffer.data());
         exit(EXIT_FAILURE);
     }
 
