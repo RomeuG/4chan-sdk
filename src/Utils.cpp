@@ -15,6 +15,14 @@ auto replace(std::string& str, std::string_view const from, std::string_view con
     }
 }
 
+auto create_media_url(std::string const& dir, long long const tim, std::string const& extension) -> std::string
+{
+	auto absolute_path = std::filesystem::absolute(dir);
+    absolute_path.append(std::to_string(tim) + extension);
+
+	return absolute_path;
+}
+
 #ifdef MOCKDATA
 auto load_file(std::string const& path) -> std::string
 {
