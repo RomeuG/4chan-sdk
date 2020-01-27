@@ -5,7 +5,7 @@ namespace channer::repo
 auto get_thread(std::string const& board, std::string const& thread, bool file_only) -> Thread
 {
     auto website = channer::endpoints::URL_THREAD + board + channer::endpoints::TYPE_THREAD + thread + channer::endpoints::FORMAT_JSON;
-    auto download = channer::download_json(website.c_str());
+    auto download = channer::req::download_json(website.c_str());
 
     if (download == "") {
         throw std::runtime_error("Download error");
@@ -19,7 +19,7 @@ auto get_catalog(std::string const& board, bool file_only) -> Catalog
 {
 #ifndef MOCKDATA
     auto website = channer::endpoints::URL_THREAD + board + "/catalog" + channer::endpoints::FORMAT_JSON;
-    auto download = channer::download_json(website.c_str());
+    auto download = channer::req::download_json(website.c_str());
 
     if (download == "") {
         throw std::runtime_error("Download error");
@@ -38,7 +38,7 @@ auto get_boards() -> Boards
 {
 #ifndef MOCKDATA
     auto website = channer::endpoints::URL_THREAD + std::string("boards") + channer::endpoints::FORMAT_JSON;
-    auto download = channer::download_json(website.c_str());
+    auto download = channer::req::download_json(website.c_str());
 
     if (download == "") {
         throw std::runtime_error("Download error");

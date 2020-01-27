@@ -1,6 +1,6 @@
 #include <Download.hpp>
 
-namespace channer
+namespace channer::req
 {
 auto cb_curl_txt(char* data, size_t size, size_t nmemb, std::string* writer_data) -> std::size_t
 {
