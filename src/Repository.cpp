@@ -120,4 +120,10 @@ auto download_media(std::string const& board, std::string const& thread,
 
     return true;
 }
+
+auto download_media(std::string const& url, std::filesystem::path const& path) -> bool
+{
+    channer::req::download_media(url, path);
+    return true;
+}
 }
