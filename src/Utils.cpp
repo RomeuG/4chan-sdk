@@ -17,15 +17,23 @@ auto replace(std::string& str, std::string_view const from, std::string_view con
 
 auto create_media_path(std::string const& dir, long long const tim, std::string const& extension) -> std::string
 {
-	auto absolute_path = std::filesystem::absolute(dir);
+    auto absolute_path = std::filesystem::absolute(dir);
     absolute_path.append(std::to_string(tim) + extension);
 
-	return absolute_path;
+    return absolute_path;
+}
+
+auto create_media_path(std::string const& dir, std::string const& filename, std::string const& extension) -> std::string
+{
+    auto absolute_path = std::filesystem::absolute(dir);
+    absolute_path.append(filename + extension);
+
+    return absolute_path;
 }
 
 auto create_media_url(std::string const& board, long long const tim, std::string const& extension) -> std::string
 {
-	return channer::endpoints::URL_IMG + board + "/" + std::to_string(tim) + extension;
+    return channer::endpoints::URL_IMG + board + "/" + std::to_string(tim) + extension;
 }
 
 #ifdef MOCKDATA
