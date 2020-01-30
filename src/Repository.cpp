@@ -112,9 +112,9 @@ auto download_media(std::string const& board, std::string const& thread,
         }
     }
 
-    auto absolute_path = channer::utils::create_media_url(thread, tim, extension);
+    auto absolute_path = channer::utils::create_media_path(thread, tim, extension);
     if (!std::filesystem::exists(absolute_path)) {
-		auto url = channer::utils::create_media_url(board, tim, extension);
+        auto url = channer::utils::create_media_url(board, tim, extension);
         channer::req::download_media(url, absolute_path);
     }
 
