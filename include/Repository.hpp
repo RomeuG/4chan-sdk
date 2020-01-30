@@ -39,6 +39,8 @@ auto get_catalog(std::string const& board, bool file_only = false) -> Catalog;
 auto get_boards() -> Boards;
 auto search_board(Board const& desired) -> std::vector<Board>;
 
+auto download_media(std::string const& board, long long const tim, std::string const& extension, std::string const& filename, std::filesystem::path const& path) -> bool;
+auto download_media(std::string const& board, long long const tim, std::string const& extension, std::filesystem::path const& path) -> bool;
 auto download_media(std::string const& url, std::string const& thread, long long const tim, std::string const& extension) -> bool;
 auto download_media(std::string const& url, std::filesystem::path const& path) -> bool;
 }

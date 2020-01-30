@@ -103,6 +103,40 @@ auto search_board(Board const& desired) -> std::vector<Board>
     return found;
 }
 
+auto download_media(std::string const& board, long long const tim, std::string const& extension, std::string const& filename, std::filesystem::path const& path) -> bool
+{
+    if (!std::filesystem::exists(path)) {
+        if (!std::filesystem::create_directory(path)) {
+            throw std::runtime_error("Error creating directory");
+        }
+    }
+
+    auto absolute_path = channer::utils::create_media_path(path, filename, extension);
+    if (!std::filesystem::exists(absolute_path)) {
+        auto url = channer::utils::create_media_url(board, tim, extension);
+        channer::req::download_media(url, absolute_path);
+    }
+
+    return true;
+}
+
+auto download_media(std::string const& board, long long const tim, std::string const& extension, std::filesystem::path const& path) -> bool
+{
+    if (!std::filesystem::exists(path)) {
+        if (!std::filesystem::create_directory(path)) {
+            throw std::runtime_error("Error creating directory");
+        }
+    }
+
+    auto absolute_path = channer::utils::create_media_path(path, tim, extension);
+    if (!std::filesystem::exists(absolute_path)) {
+        auto url = channer::utils::create_media_url(board, tim, extension);
+        channer::req::download_media(url, absolute_path);
+    }
+
+    return true;
+}
+
 auto download_media(std::string const& board, std::string const& thread,
                     long long const tim, std::string const& extension) -> bool
 {
