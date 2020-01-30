@@ -69,5 +69,25 @@ auto get_catalog(std::string const& board, std::function<void(std::optional<Cata
 auto get_catalog_files(std::string const& board, std::function<void(std::vector<File>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 auto search_board(Board const& desired, std::function<void(std::vector<Board>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+
+auto download_media(std::string const& board, long long const tim,
+                    std::string const& extension, std::string const& filename,
+                    std::filesystem::path const& path,
+                    std::function<void(bool)>&& success,
+                    std::function<void(std::string const&)>&& failure) -> void;
+
+auto download_media(std::string const& board, long long const tim,
+                    std::string const& extension, std::filesystem::path const& path,
+                    std::function<void(bool)>&& success,
+                    std::function<void(std::string const&)>&& failure) -> void;
+
+auto download_media(std::string const& board, std::string const& thread,
+                    long long const tim, std::string const& extension,
+                    std::function<void(bool)>&& success,
+                    std::function<void(std::string const&)>&& failure) -> void;
+
+auto download_media(std::string const& url, std::filesystem::path const& path,
+                    std::function<void(bool)>&& success,
+                    std::function<void(std::string const&)>&& failure) -> void;
 }
 #endif

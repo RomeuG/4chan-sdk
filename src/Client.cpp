@@ -204,14 +204,39 @@ auto search_board(Board const& desired,
         success, failure);
 }
 
-auto download_media(std::string const& url, std::string const& thread,
+auto download_media(std::string const& board, long long const tim,
+                    std::string const& extension, std::string const& filename,
+                    std::filesystem::path const& path,
+                    std::function<void(bool)>&& success,
+                    std::function<void(std::string const&)>&& failure) -> void
+{
+    execute_request<bool>(
+        [&]() -> bool {
+            return channer::repo::download_media(board, tim, extension, filename, path);
+        },
+        success, failure);
+}
+
+auto download_media(std::string const& board, long long const tim,
+                    std::string const& extension, std::filesystem::path const& path,
+                    std::function<void(bool)>&& success,
+                    std::function<void(std::string const&)>&& failure) -> void
+{
+    execute_request<bool>(
+        [&]() -> bool {
+            return channer::repo::download_media(board, tim, extension, path);
+        },
+        success, failure);
+}
+
+auto download_media(std::string const& board, std::string const& thread,
                     long long const tim, std::string const& extension,
                     std::function<void(bool)>&& success,
                     std::function<void(std::string const&)>&& failure) -> void
 {
     execute_request<bool>(
         [&]() -> bool {
-            return channer::repo::download_media(url, thread, tim, extension);
+            return channer::repo::download_media(board, thread, tim, extension);
         },
         success, failure);
 }
