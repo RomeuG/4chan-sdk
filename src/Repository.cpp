@@ -95,7 +95,9 @@ auto search_board(Board const& desired) -> std::vector<Board>
         VALIDATE_OPTION(valid, math_tags);
 
         if (valid) {
+#ifndef MOCKDATA
             std::lock_guard<std::mutex> lock{ m };
+#endif
             found.emplace_back(board);
         }
     });
