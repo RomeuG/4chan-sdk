@@ -3,6 +3,12 @@
 
 namespace channer
 {
+/**
+ * @param board
+ * @param thread
+ * @param success
+ * @param failure
+ */
 auto get_thread(std::string const& board,
                 std::string const& thread,
                 std::function<void(std::optional<Thread>)>&& success,
@@ -15,6 +21,12 @@ auto get_thread(std::string const& board,
         success, failure);
 }
 
+/**
+ * @param board
+ * @param thread
+ * @param success
+ * @param failure
+ */
 auto get_thread_files(std::string const& board,
                       std::string const& thread,
                       std::function<void(std::vector<File>)>&& success,
@@ -36,6 +48,11 @@ auto get_thread_files(std::string const& board,
         success, failure);
 }
 
+/**
+ * @param board
+ * @param success
+ * @param failure
+ */
 auto get_catalog(std::string const& board,
                  std::function<void(std::optional<Catalog>)>&& success,
                  std::function<void(std::string const&)>&& failure) -> void
@@ -47,6 +64,11 @@ auto get_catalog(std::string const& board,
         success, failure);
 }
 
+/**
+ * @param board
+ * @param success
+ * @param failure
+ */
 auto get_catalog_files(std::string const& board,
                        std::function<void(std::vector<File>)>&& success,
                        std::function<void(std::string const&)>&& failure) -> void
@@ -67,6 +89,10 @@ auto get_catalog_files(std::string const& board,
         success, failure);
 }
 
+/**
+ * @param success
+ * @param failure
+ */
 auto get_boards(std::function<void(std::optional<Boards>)>&& success,
                 std::function<void(std::string const&)>&& failure) -> void
 {
@@ -77,6 +103,11 @@ auto get_boards(std::function<void(std::optional<Boards>)>&& success,
         success, failure);
 }
 
+/**
+ * @param desired
+ * @param success
+ * @param failure
+ */
 auto search_board(Board const& desired,
                   std::function<void(std::vector<Board>)>&& success,
                   std::function<void(std::string const&)>&& failure) -> void
@@ -88,6 +119,15 @@ auto search_board(Board const& desired,
         success, failure);
 }
 
+/**
+ * @param board
+ * @param tim
+ * @param extension
+ * @param filename
+ * @param path
+ * @param success
+ * @param failure
+ */
 auto download_media(std::string const& board, long long const tim,
                     std::string const& extension, std::string const& filename,
                     std::filesystem::path const& path,
@@ -101,6 +141,14 @@ auto download_media(std::string const& board, long long const tim,
         success, failure);
 }
 
+/**
+ * @param board
+ * @param tim
+ * @param extension
+ * @param path
+ * @param success
+ * @param failure
+ */
 auto download_media(std::string const& board, long long const tim,
                     std::string const& extension, std::filesystem::path const& path,
                     std::function<void(bool)>&& success,
@@ -113,6 +161,13 @@ auto download_media(std::string const& board, long long const tim,
         success, failure);
 }
 
+/**
+ * @param board
+ * @param tim
+ * @param extension
+ * @param success
+ * @param failure
+ */
 auto download_media(std::string const& board, std::string const& thread,
                     long long const tim, std::string const& extension,
                     std::function<void(bool)>&& success,
@@ -125,6 +180,12 @@ auto download_media(std::string const& board, std::string const& thread,
         success, failure);
 }
 
+/**
+ * @param url
+ * @param path
+ * @param success
+ * @param failure
+ */
 auto download_media(std::string const& url, std::filesystem::path const& path,
                     std::function<void(bool)>&& success,
                     std::function<void(std::string const&)>&& failure) -> void
