@@ -5,7 +5,7 @@ namespace channer
 {
 /**
  * @param board The board string (e.g.: "g")
- * @param thread
+ * @param thread Thread value (e.g.: 74634876)
  * @param success Success callback with a [std::optional<Thread>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
@@ -22,8 +22,8 @@ auto get_thread(std::string const& board,
 }
 
 /**
- * @param board
- * @param thread
+ * @param board The board string (e.g.: "g")
+ * @param thread Thread value (e.g.: 74634876)
  * @param success Success callback with a [std::vector<File>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
@@ -49,7 +49,7 @@ auto get_thread_files(std::string const& board,
 }
 
 /**
- * @param board
+ * @param board The board string (e.g.: "g")
  * @param success Success callback with a [std::optional<Catalog>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
@@ -65,7 +65,7 @@ auto get_catalog(std::string const& board,
 }
 
 /**
- * @param board
+ * @param board The board string (e.g.: "g")
  * @param success Success callback with a [std::vector<File>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
@@ -104,7 +104,7 @@ auto get_boards(std::function<void(std::optional<Boards>)>&& success,
 }
 
 /**
- * @param desired
+ * @param desired [Board] object with the desired fields set
  * @param success Success callback with a [std::vector<Board>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
@@ -120,11 +120,11 @@ auto search_board(Board const& desired,
 }
 
 /**
- * @param board
- * @param tim
- * @param extension
- * @param filename
- * @param path
+ * @param board The board string (e.g.: "g")
+ * @param tim Tim value
+ * @param extension File extension
+ * @param filename File name
+ * @param path File directory
  * @param success Success callback with a [bool] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
@@ -142,10 +142,10 @@ auto download_media(std::string const& board, long long const tim,
 }
 
 /**
- * @param board
- * @param tim
- * @param extension
- * @param path
+ * @param board The board string (e.g.: "g")
+ * @param tim Tim value
+ * @param extension File extension
+ * @param path File directory
  * @param success Success callback with a [bool] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
@@ -162,9 +162,9 @@ auto download_media(std::string const& board, long long const tim,
 }
 
 /**
- * @param board
- * @param tim
- * @param extension
+ * @param board The board string (e.g.: "g")
+ * @param tim Tim value
+ * @param extension File extension
  * @param success Success callback with a [bool] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
@@ -181,8 +181,8 @@ auto download_media(std::string const& board, std::string const& thread,
 }
 
 /**
- * @param url
- * @param path
+ * @param url File URL
+ * @param path File path
  * @param success Success callback with a [bool] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
