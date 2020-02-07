@@ -4,6 +4,8 @@
 namespace channer
 {
 /**
+ * Get Thread information
+ *
  * @param board The board string (e.g.: "g")
  * @param thread Thread value (e.g.: 74634876)
  * @param success Success callback with a [std::optional<Thread>] as parameter
@@ -22,6 +24,8 @@ auto get_thread(std::string const& board,
 }
 
 /**
+ * Get list of files in Thread
+ *
  * @param board The board string (e.g.: "g")
  * @param thread Thread value (e.g.: 74634876)
  * @param success Success callback with a [std::vector<File>] as parameter
@@ -49,6 +53,8 @@ auto get_thread_files(std::string const& board,
 }
 
 /**
+ *
+ *
  * @param board The board string (e.g.: "g")
  * @param success Success callback with a [std::optional<Catalog>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
