@@ -63,29 +63,101 @@ constexpr auto execute_request(
     }
 }
 
+/**
+ * Get Thread information
+ *
+ * @param board The board string (e.g.: "g")
+ * @param thread Thread value (e.g.: 74634876)
+ * @param success Success callback with a [std::optional<Thread>] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+
+/**
+ * Get list of files in Thread
+ *
+ * @param board The board string (e.g.: "g")
+ * @param thread Thread value (e.g.: 74634876)
+ * @param success Success callback with a [std::vector<File>] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto get_thread_files(std::string const& board, std::string const& thread, std::function<void(std::vector<File>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+
+/**
+ *
+ *
+ * @param board The board string (e.g.: "g")
+ * @param success Success callback with a [std::optional<Catalog>] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+
+/**
+ * @param board The board string (e.g.: "g")
+ * @param success Success callback with a [std::vector<File>] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto get_catalog_files(std::string const& board, std::function<void(std::vector<File>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+
+/**
+ * @param success Success callback with a [std::optional<Boards>] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+
+/**
+ * @param desired [Board] object with the desired fields set
+ * @param success Success callback with a [std::vector<Board>] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto search_board(Board const& desired, std::function<void(std::vector<Board>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
+/**
+ * @param board The board string (e.g.: "g")
+ * @param tim Tim value
+ * @param extension File extension
+ * @param filename File name
+ * @param path File directory
+ * @param success Success callback with a [bool] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto download_media(std::string const& board, long long const tim,
                     std::string const& extension, std::string const& filename,
                     std::filesystem::path const& path,
                     std::function<void(bool)>&& success,
                     std::function<void(std::string const&)>&& failure) -> void;
 
+/**
+ * @param board The board string (e.g.: "g")
+ * @param tim Tim value
+ * @param extension File extension
+ * @param path File directory
+ * @param success Success callback with a [bool] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto download_media(std::string const& board, long long const tim,
                     std::string const& extension, std::filesystem::path const& path,
                     std::function<void(bool)>&& success,
                     std::function<void(std::string const&)>&& failure) -> void;
 
+/**
+ * @param board The board string (e.g.: "g")
+ * @param tim Tim value
+ * @param extension File extension
+ * @param success Success callback with a [bool] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto download_media(std::string const& board, std::string const& thread,
                     long long const tim, std::string const& extension,
                     std::function<void(bool)>&& success,
                     std::function<void(std::string const&)>&& failure) -> void;
 
+/**
+ * @param url File URL
+ * @param path File path
+ * @param success Success callback with a [bool] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
 auto download_media(std::string const& url, std::filesystem::path const& path,
                     std::function<void(bool)>&& success,
                     std::function<void(std::string const&)>&& failure) -> void;
