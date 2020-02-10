@@ -24,10 +24,11 @@ auto execute_request(
     std::function<void(std::string const&)> failure) -> void
 {
     try {
-        auto res = std::async(std::launch::async,
-                              [request = std::forward<F>(request)](auto&&... args) -> T {
-                                  return request(std::forward<decltype(args)>(args)...);
-                              });
+        auto res = std::async(
+            std::launch::async,
+            [request = std::forward<F>(request)](auto&&... args) -> T {
+                return request(std::forward<decltype(args)>(args)...);
+            });
 
         success(res.get());
     } catch (nlohmann::json::parse_error const& e) {
@@ -44,10 +45,11 @@ constexpr auto execute_request(
     H&& failure) -> void
 {
     try {
-        auto res = std::async(std::launch::async,
-                              [request = std::forward<F>(request)](auto const&&... args) -> T {
-                                  return request(std::forward<decltype(args)>(args)...);
-                              });
+        auto res = std::async(
+            std::launch::async,
+            [request = std::forward<F>(request)](auto const&&... args) -> T {
+                return request(std::forward<decltype(args)>(args)...);
+            });
 
         [success = std::forward<G>(success)](auto const&&... args) {
             success(std::forward<decltype(args)>(args)...);
@@ -84,7 +86,7 @@ auto get_thread(std::string const& board, std::string const& thread, std::functi
 auto get_thread_files(std::string const& board, std::string const& thread, std::function<void(std::vector<File>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
- *
+ * Get a Board Catalog
  *
  * @param board The board string (e.g.: "g")
  * @param success Success callback with a [std::optional<Catalog>] as parameter
@@ -93,6 +95,8 @@ auto get_thread_files(std::string const& board, std::string const& thread, std::
 auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
+ * Get list of files from Catalog
+ *
  * @param board The board string (e.g.: "g")
  * @param success Success callback with a [std::vector<File>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
@@ -100,12 +104,16 @@ auto get_catalog(std::string const& board, std::function<void(std::optional<Cata
 auto get_catalog_files(std::string const& board, std::function<void(std::vector<File>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
+ * Get Boards
+ *
  * @param success Success callback with a [std::optional<Boards>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
 auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
+ * Search a Board with the desired attributes
+ *
  * @param desired [Board] object with the desired fields set
  * @param success Success callback with a [std::vector<Board>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
@@ -113,6 +121,8 @@ auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::funct
 auto search_board(Board const& desired, std::function<void(std::vector<Board>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
+ * Download file to given path (directory path)
+ *
  * @param board The board string (e.g.: "g")
  * @param tim Tim value
  * @param extension File extension
@@ -128,6 +138,8 @@ auto download_media(std::string const& board, long long const tim,
                     std::function<void(std::string const&)>&& failure) -> void;
 
 /**
+ * Download file to given path (file path)
+ *
  * @param board The board string (e.g.: "g")
  * @param tim Tim value
  * @param extension File extension
@@ -141,6 +153,8 @@ auto download_media(std::string const& board, long long const tim,
                     std::function<void(std::string const&)>&& failure) -> void;
 
 /**
+ * Download file. It's output directory will be the thread string
+ *
  * @param board The board string (e.g.: "g")
  * @param tim Tim value
  * @param extension File extension
@@ -153,6 +167,8 @@ auto download_media(std::string const& board, std::string const& thread,
                     std::function<void(std::string const&)>&& failure) -> void;
 
 /**
+ * Download file from URL to given path (file path)
+ *
  * @param url File URL
  * @param path File path
  * @param success Success callback with a [bool] as parameter
