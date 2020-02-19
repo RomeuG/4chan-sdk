@@ -1,12 +1,15 @@
 #ifndef _THREAD_HPP_
 #define _THREAD_HPP_
 
-#include <vector>
 #include "Post.hpp"
 
-struct Thread
-{
-	std::vector<Post> posts;
+#include <vector>
+
+struct Thread {
+    /**
+	 * std::vector of Post
+	 */
+    std::vector<Post> posts;
 };
 
 #endif

@@ -4,6 +4,9 @@
 #include <CatalogEntry.hpp>
 
 struct Catalog {
+    /**
+	 * std::vector of CatalogEntry
+	 */
     std::vector<CatalogEntry> entries;
 };
 
