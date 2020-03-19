@@ -19,6 +19,14 @@ constexpr auto GET_VAL(nlohmann::json& post, std::string const& key, T& data) ->
     }
 }
 
+constexpr auto DELETE_KEY(nlohmann::json& json, std::string const& key)
+{
+    try {
+        json.erase(key);
+    } catch (...) {
+    }
+}
+
 namespace channer::json
 {
 auto get_file(nlohmann::json& post, std::string const& board) -> File;
@@ -32,6 +40,9 @@ auto get_catalog(nlohmann::json& catalog, std::string const& board, bool file_on
 auto get_thread(nlohmann::json& thread, std::string const& board, bool file_only) -> Thread;
 
 auto get_boards(nlohmann::json& boards) -> Boards;
+
+auto sanitize_thread(nlohmann::json& thread) -> std::string;
+auto sanitize_catalog(nlohmann::json& catalog) -> std::string;
 }
 
 #endif

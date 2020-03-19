@@ -15,6 +15,19 @@ auto get_thread(std::string const& board, std::string const& thread, bool file_o
     return channer::json::get_thread(json, board, file_only);
 }
 
+auto get_thread_json(std::string const& board, std::string const& thread) -> std::string
+{
+    auto website = channer::endpoints::URL_THREAD + board + channer::endpoints::TYPE_THREAD + thread + channer::endpoints::FORMAT_JSON;
+    auto download = channer::req::download_json(website.c_str());
+
+    if (download == "") {
+        throw std::runtime_error("Download error");
+    }
+
+    auto json = nlohmann::json::parse(download);
+    return channer::json::sanitize_thread(json);
+}
+
 auto get_catalog(std::string const& board, bool file_only) -> Catalog
 {
 #ifndef MOCKDATA
@@ -31,6 +44,25 @@ auto get_catalog(std::string const& board, bool file_only) -> Catalog
     auto mock = channer::utils::load_file("../dummy/catalog-po.json");
     auto json = nlohmann::json::parse(mock);
     return channer::json::get_catalog(json, board, file_only);
+#endif
+}
+
+auto get_catalog_json(std::string const& board) -> std::string
+{
+#ifndef MOCKDATA
+    auto website = channer::endpoints::URL_THREAD + board + "/catalog" + channer::endpoints::FORMAT_JSON;
+    auto download = channer::req::download_json(website.c_str());
+
+    if (download == "") {
+        throw std::runtime_error("Download error");
+    }
+
+    auto json = nlohmann::json::parse(download);
+    return channer::json::sanitize_catalog(json);
+#else
+    auto mock = channer::utils::load_file("../dummy/catalog-po.json");
+    auto json = nlohmann::json::parse(mock);
+    return channer::json::sanitize_catalog(json);
 #endif
 }
 

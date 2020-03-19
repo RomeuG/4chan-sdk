@@ -1,3 +1,5 @@
+#include "Repository.hpp"
+
 #include <Client.hpp>
 #include <cstdio>
 
@@ -11,6 +13,18 @@ auto get_thread(std::string const& board,
     execute_request<Thread>(
         [&]() -> Thread {
             return channer::repo::get_thread(board, thread, false);
+        },
+        success, failure);
+}
+
+auto get_thread_json(std::string const& board,
+                     std::string const& thread,
+                     std::function<void(std::string)>&& success,
+                     std::function<void(std::string const&)>&& failure) -> void
+{
+    execute_request<std::string>(
+        [&]() -> std::string {
+            return channer::repo::get_thread_json(board, thread);
         },
         success, failure);
 }
@@ -43,6 +57,17 @@ auto get_catalog(std::string const& board,
     execute_request<Catalog>(
         [&]() -> Catalog {
             return channer::repo::get_catalog(board);
+        },
+        success, failure);
+}
+
+auto get_catalog_json(std::string const& board,
+                      std::function<void(std::string)>&& success,
+                      std::function<void(std::string const&)>&& failure) -> void
+{
+    execute_request<std::string>(
+        [&]() -> std::string {
+            return channer::repo::get_catalog_json(board);
         },
         success, failure);
 }

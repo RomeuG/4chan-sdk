@@ -33,7 +33,7 @@ auto get_post(nlohmann::json& post, std::string const& board) -> Post
 {
     Post post_obj;
 
-	GET_VAL<int>(post, "no", post_obj.postnumber);
+    GET_VAL<int>(post, "no", post_obj.postnumber);
     GET_VAL<std::string>(post, "now", post_obj.date);
     GET_VAL<std::string>(post, "name", post_obj.name);
     GET_VAL<std::string>(post, "sub", post_obj.subject);
@@ -133,7 +133,7 @@ auto get_catalog_entry_file_only(nlohmann::json& catalog, std::string const& boa
     CatalogEntry catalog_obj;
 
     if (!catalog["filename"].empty()) {
-        auto file_obj    = get_file(catalog, board);
+        auto file_obj = get_file(catalog, board);
         catalog_obj.file = file_obj;
     }
 
@@ -142,45 +142,45 @@ auto get_catalog_entry_file_only(nlohmann::json& catalog, std::string const& boa
 
 auto get_board(nlohmann::json& board) -> Board
 {
-	Board board_obj;
+    Board board_obj;
 
-	GET_VAL<std::string>(board, "board", board_obj.board);
-	GET_VAL<std::string>(board, "title", board_obj.title);
+    GET_VAL<std::string>(board, "board", board_obj.board);
+    GET_VAL<std::string>(board, "title", board_obj.title);
 
-	GET_VAL<int>(board, "ws_board", board_obj.ws_board);
-	GET_VAL<int>(board, "per_page", board_obj.per_page);
-	GET_VAL<int>(board, "pages", board_obj.pages);
-	GET_VAL<int>(board, "max_filesize", board_obj.max_filesize);
-	GET_VAL<int>(board, "max_webm_filesize", board_obj.max_webm_filesize);
-	GET_VAL<int>(board, "max_comment_chars", board_obj.max_comment_chars);
-	GET_VAL<int>(board, "max_webm_duration", board_obj.max_webm_duration);
-	GET_VAL<int>(board, "bump_limit", board_obj.bump_limit);
-	GET_VAL<int>(board, "image_limit", board_obj.image_limit);
+    GET_VAL<int>(board, "ws_board", board_obj.ws_board);
+    GET_VAL<int>(board, "per_page", board_obj.per_page);
+    GET_VAL<int>(board, "pages", board_obj.pages);
+    GET_VAL<int>(board, "max_filesize", board_obj.max_filesize);
+    GET_VAL<int>(board, "max_webm_filesize", board_obj.max_webm_filesize);
+    GET_VAL<int>(board, "max_comment_chars", board_obj.max_comment_chars);
+    GET_VAL<int>(board, "max_webm_duration", board_obj.max_webm_duration);
+    GET_VAL<int>(board, "bump_limit", board_obj.bump_limit);
+    GET_VAL<int>(board, "image_limit", board_obj.image_limit);
 
-	if (!board["cooldowns"].empty()) {
-		board_obj.cooldowns.images = board["cooldowns"]["images"].get<int>();
-		board_obj.cooldowns.replies = board["cooldowns"]["replies"].get<int>();
-		board_obj.cooldowns.threads = board["cooldowns"]["threads"].get<int>();
-	}
+    if (!board["cooldowns"].empty()) {
+        board_obj.cooldowns.images = board["cooldowns"]["images"].get<int>();
+        board_obj.cooldowns.replies = board["cooldowns"]["replies"].get<int>();
+        board_obj.cooldowns.threads = board["cooldowns"]["threads"].get<int>();
+    }
 
-	GET_VAL<std::string>(board, "meta_description", board_obj.meta_description);
+    GET_VAL<std::string>(board, "meta_description", board_obj.meta_description);
 
-	GET_VAL<int>(board, "user_ids", board_obj.user_ids);
-	GET_VAL<int>(board, "country_flags", board_obj.country_flags);
-	GET_VAL<int>(board, "forced_anon", board_obj.forced_anon);
-	GET_VAL<int>(board, "spoilers", board_obj.spoilers);
-	GET_VAL<int>(board, "custom_spoilers", board_obj.custom_spoilers);
-	GET_VAL<int>(board, "is_archived", board_obj.is_archived);
-	GET_VAL<int>(board, "require_subject", board_obj.require_subject);
-	GET_VAL<int>(board, "sjis_tags", board_obj.sjis_tags);
-	GET_VAL<int>(board, "oekaki", board_obj.oekaki);
-	GET_VAL<int>(board, "troll_flags", board_obj.troll_flags);
-	GET_VAL<int>(board, "webm_audio", board_obj.webm_audio);
-	GET_VAL<int>(board, "min_image_width", board_obj.min_image_width);
-	GET_VAL<int>(board, "min_image_height", board_obj.min_image_height);
-	GET_VAL<int>(board, "math_tags", board_obj.math_tags);
+    GET_VAL<int>(board, "user_ids", board_obj.user_ids);
+    GET_VAL<int>(board, "country_flags", board_obj.country_flags);
+    GET_VAL<int>(board, "forced_anon", board_obj.forced_anon);
+    GET_VAL<int>(board, "spoilers", board_obj.spoilers);
+    GET_VAL<int>(board, "custom_spoilers", board_obj.custom_spoilers);
+    GET_VAL<int>(board, "is_archived", board_obj.is_archived);
+    GET_VAL<int>(board, "require_subject", board_obj.require_subject);
+    GET_VAL<int>(board, "sjis_tags", board_obj.sjis_tags);
+    GET_VAL<int>(board, "oekaki", board_obj.oekaki);
+    GET_VAL<int>(board, "troll_flags", board_obj.troll_flags);
+    GET_VAL<int>(board, "webm_audio", board_obj.webm_audio);
+    GET_VAL<int>(board, "min_image_width", board_obj.min_image_width);
+    GET_VAL<int>(board, "min_image_height", board_obj.min_image_height);
+    GET_VAL<int>(board, "math_tags", board_obj.math_tags);
 
-	return board_obj;
+    return board_obj;
 }
 
 auto get_thread(nlohmann::json& thread, std::string const& board, bool file_only) -> Thread
@@ -212,13 +212,13 @@ auto get_catalog(nlohmann::json& catalog, std::string const& board, bool file_on
 
     for (nlohmann::json& page : catalog) {
         for (nlohmann::json& entry : page["threads"]) {
-			if (file_only) {
-				auto catalog_entry = get_catalog_entry_file_only(entry, board);
-				catalog_obj.entries.emplace_back(catalog_entry);
-			} else {
-				auto catalog_entry = get_catalog_entry(entry, board);
-				catalog_obj.entries.emplace_back(catalog_entry);
-			}
+            if (file_only) {
+                auto catalog_entry = get_catalog_entry_file_only(entry, board);
+                catalog_obj.entries.emplace_back(catalog_entry);
+            } else {
+                auto catalog_entry = get_catalog_entry(entry, board);
+                catalog_obj.entries.emplace_back(catalog_entry);
+            }
         }
     }
 
@@ -227,19 +227,45 @@ auto get_catalog(nlohmann::json& catalog, std::string const& board, bool file_on
 
 auto get_boards(nlohmann::json& boards) -> Boards
 {
-	Boards boards_obj;
+    Boards boards_obj;
 
-	boards_obj.boards.reserve(100);
+    boards_obj.boards.reserve(100);
 
-	for (nlohmann::json& board : boards["boards"]) {
-		auto board_obj = get_board(board);
-		boards_obj.boards.emplace_back(board_obj);
-	}
+    for (nlohmann::json& board : boards["boards"]) {
+        auto board_obj = get_board(board);
+        boards_obj.boards.emplace_back(board_obj);
+    }
 
-	for (auto& el : boards["troll_flags"].items()) {
-		boards_obj.troll_flags_list[el.key()] = el.value();
-	}
+    for (auto& el : boards["troll_flags"].items()) {
+        boards_obj.troll_flags_list[el.key()] = el.value();
+    }
 
-	return boards_obj;
+    return boards_obj;
+}
+
+auto sanitize_thread(nlohmann::json& thread) -> std::string
+{
+    for (nlohmann::json& post : thread["posts"]) {
+        DELETE_KEY(post, "md5");
+        DELETE_KEY(post, "bumplimit");
+        DELETE_KEY(post, "imagelimit");
+        DELETE_KEY(post, "unique_ips");
+    }
+
+    return thread.dump();
+}
+
+auto sanitize_catalog(nlohmann::json& catalog) -> std::string
+{
+    for (nlohmann::json& page : catalog) {
+        for (nlohmann::json& entry : page["threads"]) {
+            DELETE_KEY(entry, "capcode");
+            DELETE_KEY(entry, "last_replies");
+            DELETE_KEY(entry, "last_last_modified");
+            DELETE_KEY(entry, "last_last_modified");
+        }
+    }
+
+    return catalog.dump();
 }
 }

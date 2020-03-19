@@ -35,7 +35,9 @@ inline auto validate_option<std::string>(bool& valid, std::string desired, std::
 }
 
 auto get_thread(std::string const& board, std::string const& thread, bool file_only = false) -> Thread;
+auto get_thread_json(std::string const& board, std::string const& thread) -> std::string;
 auto get_catalog(std::string const& board, bool file_only = false) -> Catalog;
+auto get_catalog_json(std::string const& board) -> std::string;
 auto get_boards() -> Boards;
 auto search_board(Board const& desired) -> std::vector<Board>;
 
