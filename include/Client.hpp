@@ -76,6 +76,16 @@ constexpr auto execute_request(
 auto get_thread(std::string const& board, std::string const& thread, std::function<void(std::optional<Thread>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
+ * Get Thread information as std::string
+ *
+ * @param board The board string (e.g.: "g")
+ * @param thread Thread value (e.g.: 74634876)
+ * @param success Success callback with a [std::optional<Thread>] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
+auto get_thread_json(std::string const& board, std::string const& thread, std::function<void(std::string)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+
+/**
  * Get list of files in Thread
  *
  * @param board The board string (e.g.: "g")
@@ -93,6 +103,15 @@ auto get_thread_files(std::string const& board, std::string const& thread, std::
  * @param failure Failure callback with a [std::string] as parameter
  */
 auto get_catalog(std::string const& board, std::function<void(std::optional<Catalog>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+
+/**
+ * Get a Board Catalog as std::string
+ *
+ * @param board The board string (e.g.: "g")
+ * @param success Success callback with a [std::optional<Catalog>] as parameter
+ * @param failure Failure callback with a [std::string] as parameter
+ */
+auto get_catalog_json(std::string const& board, std::function<void(std::string)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
  * Get list of files from Catalog

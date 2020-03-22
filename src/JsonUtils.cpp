@@ -252,13 +252,14 @@ auto sanitize_thread(nlohmann::json& thread) -> std::string
         DELETE_KEY(post, "unique_ips");
     }
 
-    return thread.dump();
+    return thread.dump(4);
 }
 
 auto sanitize_catalog(nlohmann::json& catalog) -> std::string
 {
     for (nlohmann::json& page : catalog) {
         for (nlohmann::json& entry : page["threads"]) {
+            DELETE_KEY(entry, "md5");
             DELETE_KEY(entry, "capcode");
             DELETE_KEY(entry, "last_replies");
             DELETE_KEY(entry, "last_last_modified");
@@ -266,6 +267,6 @@ auto sanitize_catalog(nlohmann::json& catalog) -> std::string
         }
     }
 
-    return catalog.dump();
+    return catalog.dump(4);
 }
 }
