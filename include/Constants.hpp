@@ -79,14 +79,14 @@ const std::unordered_map<std::string, std::string> chanlist{
 
 namespace endpoints
 {
-    constexpr char URL_IMG[] = "http://i.4cdn.org/";
-    constexpr char URL_THREAD[] = "http://a.4cdn.org/";
+    constexpr char URL_IMG[] = "https://i.4cdn.org/";
+    constexpr char URL_THREAD[] = "https://a.4cdn.org/";
 
     constexpr char TYPE_THREAD[] = "/thread/";
 
     constexpr char FORMAT_JSON[] = ".json";
 
-    constexpr char MEDIA[] = "http://i.4cdn.org/{board}/{tim}/{file}";
+    constexpr char MEDIA[] = "https://i.4cdn.org/{board}/{tim}/{file}";
 }
 }
 
