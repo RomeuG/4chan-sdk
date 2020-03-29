@@ -66,7 +66,7 @@ auto download_json(const char* url) -> std::string
     curl_easy_getinfo(curl_ctx, CURLINFO_RESPONSE_CODE, &res_code);
 
     if (!((res_code == 200 || res_code == 201 || res_code == 403))) {
-        std::printf("ChannerSDK :: error :: Response code: %d\n", res_code);
+        std::printf("ChannerSDK :: error :: Response code: %d (%s)\n", res_code, url);
         return "";
     }
 
@@ -111,7 +111,7 @@ auto download_media(std::string const& url, std::filesystem::path const& path) -
     curl_easy_getinfo(curl_ctx, CURLINFO_RESPONSE_CODE, &res_code);
 
     if (!((res_code == 200 || res_code == 201))) {
-        std::printf("ChannerSDK :: error :: Response code: %d\n", res_code);
+        std::printf("ChannerSDK :: error :: Response code: %d (%s)\n", res_code, url.c_str());
 
         curl_easy_cleanup(curl_ctx);
         std::fclose(fp);
