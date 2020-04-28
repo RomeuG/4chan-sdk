@@ -25,7 +25,7 @@ auto get_thread_json(std::string const& board, std::string const& thread) -> std
     }
 
     auto json = nlohmann::json::parse(download);
-    return channer::json::sanitize_thread(json);
+    return channer::json::dump_thread(json, false);
 }
 
 auto get_catalog(std::string const& board, bool file_only) -> Catalog
@@ -58,7 +58,7 @@ auto get_catalog_json(std::string const& board) -> std::string
     }
 
     auto json = nlohmann::json::parse(download);
-    return channer::json::sanitize_catalog(json);
+    return channer::json::dump_catalog(json, false);
 #else
     auto mock = channer::utils::load_file("../dummy/catalog-po.json");
     auto json = nlohmann::json::parse(mock);

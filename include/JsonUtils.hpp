@@ -41,8 +41,8 @@ auto get_thread(nlohmann::json& thread, std::string const& board, bool file_only
 
 auto get_boards(nlohmann::json& boards) -> Boards;
 
-auto sanitize_thread(nlohmann::json& thread) -> std::string;
-auto sanitize_catalog(nlohmann::json& catalog) -> std::string;
+auto dump_thread(nlohmann::json& thread, bool sanitize) -> std::string;
+auto dump_catalog(nlohmann::json& catalog, bool sanitize) -> std::string;
 }
 
 #endif
