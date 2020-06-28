@@ -103,7 +103,7 @@ auto _get_post_text(xmlpp::Element* element) -> std::vector<Text>
         sibling = sibling->get_next_sibling();
     }
 
-	element->remove_node(element);
+    element->remove_node(element);
 
     return vec_text;
 }
@@ -113,6 +113,9 @@ auto get_post_text(nlohmann::json& post) -> std::vector<Text>
     std::vector<Text> text_list;
 
     auto str = post["com"].get<std::string>();
+
+    // sanitize useless <wbr>
+    channer::utils::replace(str, "<wbr>", "");
 
     htmlDocPtr doc = nullptr;
     xmlNode* root = nullptr;
