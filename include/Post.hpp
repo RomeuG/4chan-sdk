@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+namespace channer::json
+{
 struct Post {
     int postnumber = -1;
     std::string date;
@@ -33,5 +35,6 @@ struct Post {
     int unique_ips = -1;
     int tail_size = -1;
 };
+}
 
 #endif

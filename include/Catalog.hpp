@@ -3,11 +3,13 @@
 
 #include <CatalogEntry.hpp>
 
+namespace channer::json
+{
 struct Catalog {
     /**
 	 * std::vector of CatalogEntry
 	 */
     std::vector<CatalogEntry> entries;
 };
-
+}
 #endif

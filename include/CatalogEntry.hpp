@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
+namespace channer::json
+{
 struct CatalogEntry {
     int postnumber = -1;
     int sticky = -1;
@@ -39,5 +41,6 @@ struct CatalogEntry {
 
     int last_modified = -1;
 };
+}
 
 #endif

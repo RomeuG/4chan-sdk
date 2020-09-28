@@ -2,7 +2,7 @@
 
 namespace channer::repo
 {
-auto get_thread(std::string const& board, std::string const& thread, bool file_only) -> Thread
+auto get_thread(std::string const& board, std::string const& thread, bool file_only) -> channer::json::Thread
 {
     auto website = channer::endpoints::URL_THREAD + board + channer::endpoints::TYPE_THREAD + thread + channer::endpoints::FORMAT_JSON;
     auto download = channer::req::download_json(website.c_str());
@@ -28,7 +28,7 @@ auto get_thread_json(std::string const& board, std::string const& thread) -> std
     return channer::json::dump_thread(json, false);
 }
 
-auto get_catalog(std::string const& board, bool file_only) -> Catalog
+auto get_catalog(std::string const& board, bool file_only) -> channer::json::Catalog
 {
 #ifndef MOCKDATA
     auto website = channer::endpoints::URL_THREAD + board + "/catalog" + channer::endpoints::FORMAT_JSON;
