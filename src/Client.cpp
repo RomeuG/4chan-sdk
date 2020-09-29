@@ -12,7 +12,7 @@ auto get_thread(std::string const& board,
 {
     execute_request<json::Thread>(
         [&]() -> json::Thread {
-            return channer::repo::get_thread(board, thread, false);
+            return channer::repo::get_thread(board, thread);
         },
         success, failure);
 }
@@ -37,7 +37,7 @@ auto get_thread_files(std::string const& board,
     execute_request<std::vector<File>>(
         [&]() -> std::vector<File> {
             std::vector<File> files;
-            auto thread_obj = channer::repo::get_thread(board, thread, true);
+            auto thread_obj = channer::repo::get_thread(board, thread);
 
             std::for_each(std::begin(thread_obj.posts), std::end(thread_obj.posts), [&](json::Post const& post) {
                 if (post.file.has_value()) {
@@ -79,7 +79,7 @@ auto get_catalog_files(std::string const& board,
     execute_request<std::vector<File>>(
         [&]() -> std::vector<File> {
             std::vector<File> files;
-            auto catalog_obj = channer::repo::get_catalog(board, true);
+            auto catalog_obj = channer::repo::get_catalog(board);
 
             std::for_each(std::begin(catalog_obj.entries), std::end(catalog_obj.entries), [&](json::CatalogEntry const& entry) {
                 if (entry.file.has_value()) {

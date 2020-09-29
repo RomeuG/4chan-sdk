@@ -29,53 +29,15 @@ auto get_file(nlohmann::json& post, std::string const& board) -> File
     return file;
 }
 
-auto get_post(nlohmann::json& post, std::string const& board) -> Post
+auto get_post(nlohmann::json& json, std::string const& board) -> Post
 {
-    auto __a = post.get<Post>();
+    auto post = json.get<Post>();
 
-    Post post_obj;
-
-    GET_VAL<int>(post, "no", post_obj.postnumber);
-    GET_VAL<std::string>(post, "now", post_obj.date);
-    GET_VAL<std::string>(post, "name", post_obj.name);
-    GET_VAL<std::string>(post, "sub", post_obj.subject);
-
-    if (!post["com"].empty()) {
-        auto text_obj = channer::html::get_post_text(post);
-        post_obj.text = text_obj;
+    if (post.file.has_value()) {
+        post.file->url = "http://i.4cdn.org/" + board + "/" + std::to_string(post.file->tim) + post.file->ext;
     }
 
-    if (!post["filename"].empty()) {
-        auto file_obj = get_file(post, board);
-        post_obj.file = file_obj;
-    }
-
-    GET_VAL<std::string>(post, "id", post_obj.id);
-    GET_VAL<std::string>(post, "country", post_obj.country);
-    GET_VAL<std::string>(post, "country_name", post_obj.country_name);
-
-    GET_VAL<int>(post, "replies", post_obj.replies);
-    GET_VAL<int>(post, "images", post_obj.images);
-    GET_VAL<int>(post, "unique_ips", post_obj.unique_ips);
-    GET_VAL<int>(post, "tail_size", post_obj.tail_size);
-    GET_VAL<int>(post, "archived", post_obj.archived);
-    GET_VAL<int>(post, "archived_on", post_obj.archived_on);
-
-    return post_obj;
-}
-
-auto get_post_file_only(nlohmann::json& post, std::string const& board) -> Post
-{
-    Post post_obj;
-
-    GET_VAL<int>(post, "no", post_obj.postnumber);
-
-    if (!post["filename"].empty()) {
-        auto file_obj = get_file(post, board);
-        post_obj.file = file_obj;
-    }
-
-    return post_obj;
+    return post;
 }
 
 auto get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> CatalogEntry
@@ -130,18 +92,6 @@ auto get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> Cat
     return catalog_obj;
 }
 
-auto get_catalog_entry_file_only(nlohmann::json& catalog, std::string const& board) -> CatalogEntry
-{
-    CatalogEntry catalog_obj;
-
-    if (!catalog["filename"].empty()) {
-        auto file_obj = get_file(catalog, board);
-        catalog_obj.file = file_obj;
-    }
-
-    return catalog_obj;
-}
-
 auto get_board(nlohmann::json& board) -> Board
 {
     Board board_obj;
@@ -185,7 +135,7 @@ auto get_board(nlohmann::json& board) -> Board
     return board_obj;
 }
 
-auto get_thread(nlohmann::json& thread, std::string const& board, bool file_only) -> Thread
+auto get_thread(nlohmann::json& thread, std::string const& board) -> Thread
 {
     Thread thread_obj;
 
@@ -194,11 +144,7 @@ auto get_thread(nlohmann::json& thread, std::string const& board, bool file_only
     for (nlohmann::json& post : thread["posts"]) {
         Post post_info;
 
-        if (file_only) {
-            post_info = get_post_file_only(post, board);
-        } else {
-            post_info = get_post(post, board);
-        }
+        post_info = get_post(post, board);
 
         thread_obj.posts.emplace_back(post_info);
     }
@@ -206,7 +152,7 @@ auto get_thread(nlohmann::json& thread, std::string const& board, bool file_only
     return thread_obj;
 }
 
-auto get_catalog(nlohmann::json& catalog, std::string const& board, bool file_only) -> Catalog
+auto get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog
 {
     Catalog catalog_obj;
 
@@ -214,13 +160,8 @@ auto get_catalog(nlohmann::json& catalog, std::string const& board, bool file_on
 
     for (nlohmann::json& page : catalog) {
         for (nlohmann::json& entry : page["threads"]) {
-            if (file_only) {
-                auto catalog_entry = get_catalog_entry_file_only(entry, board);
-                catalog_obj.entries.emplace_back(catalog_entry);
-            } else {
-                auto catalog_entry = get_catalog_entry(entry, board);
-                catalog_obj.entries.emplace_back(catalog_entry);
-            }
+            auto catalog_entry = get_catalog_entry(entry, board);
+            catalog_obj.entries.emplace_back(catalog_entry);
         }
     }
 
