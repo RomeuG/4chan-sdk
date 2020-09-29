@@ -62,7 +62,7 @@ auto get_catalog_json(std::string const& board) -> std::string
 #else
     auto mock = channer::utils::load_file("../dummy/catalog-po.json");
     auto json = nlohmann::json::parse(mock);
-    return channer::json::sanitize_catalog(json);
+    return channer::json::dump_catalog(json, false);
 #endif
 }
 

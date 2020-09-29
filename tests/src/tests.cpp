@@ -115,7 +115,7 @@ TEST_CASE("Get /po/ threads")
 {
     channer::get_catalog(
         "po",
-        [](std::optional<Catalog> arg) {
+        [](std::optional<channer::json::Catalog> arg) {
             REQUIRE(arg->entries.size() == 151);
 
             SECTION("First thread information is correct")

@@ -31,6 +31,8 @@ auto get_file(nlohmann::json& post, std::string const& board) -> File
 
 auto get_post(nlohmann::json& post, std::string const& board) -> Post
 {
+    auto __a = post.get<Post>();
+
     Post post_obj;
 
     GET_VAL<int>(post, "no", post_obj.postnumber);

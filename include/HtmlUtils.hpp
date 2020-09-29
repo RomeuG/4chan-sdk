@@ -13,7 +13,7 @@ namespace channer::html
 {
 auto convert_to_xmltree(std::string& buffer, htmlDocPtr* document, xmlNode** root) -> bool;
 auto _get_post_text(xmlpp::Element* element) -> std::vector<Text>;
-auto get_post_text(nlohmann::json& post) -> std::vector<Text>;
+auto get_post_text(nlohmann::json const& post) -> std::vector<Text>;
 }
 
 #endif

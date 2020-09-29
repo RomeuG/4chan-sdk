@@ -108,7 +108,7 @@ auto _get_post_text(xmlpp::Element* element) -> std::vector<Text>
     return vec_text;
 }
 
-auto get_post_text(nlohmann::json& post) -> std::vector<Text>
+auto get_post_text(nlohmann::json const & post) -> std::vector<Text>
 {
     std::vector<Text> text_list;
 
