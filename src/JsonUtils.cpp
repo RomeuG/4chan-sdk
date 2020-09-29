@@ -29,9 +29,10 @@ auto get_file(nlohmann::json& post, std::string const& board) -> File
     return file;
 }
 
-auto get_post(nlohmann::json& json, std::string const& board) -> Post
+auto get_post(nlohmann::json const& json, std::string const& board) -> Post
 {
-    auto post = json.get<Post>();
+    //auto post = json.get<Post>();
+    auto post = Post::from_json(json);
 
     if (post.file.has_value()) {
         post.file->url = "http://i.4cdn.org/" + board + "/" + std::to_string(post.file->tim) + post.file->ext;

@@ -7,12 +7,7 @@
 
 namespace channer::json
 {
-struct Thread {
-    /**
-	 * std::vector of Post
-	 */
-    std::vector<Post> posts;
-};
+
 }
 
 #endif
