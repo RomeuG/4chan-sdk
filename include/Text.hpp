@@ -15,7 +15,10 @@ struct Text {
     TextType type;
     std::string text;
 
-    Text(TextType type, std::string text);
+    Text(TextType type, std::string text) :
+        type(type), text(text)
+    {
+    }
 };
 
 #endif
