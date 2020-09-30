@@ -1,13 +1,7 @@
 #ifndef _JSON_UTILS_HPP_
 #define _JSON_UTILS_HPP_
 
-#include <Boards.hpp>
-#include <Catalog.hpp>
-#include <CatalogEntry.hpp>
-#include <File.hpp>
 #include <HtmlUtils.hpp>
-#include <Post.hpp>
-#include <Thread.hpp>
 #include <json.hpp>
 #include <string>
 
@@ -19,14 +13,6 @@ constexpr auto GET_VAL(nlohmann::json& post, std::string const& key, T& data) ->
     }
 }
 
-constexpr auto DELETE_KEY(nlohmann::json& json, std::string const& key)
-{
-    try {
-        json.erase(key);
-    } catch (...) {
-    }
-}
-
 namespace channer::json
 {
 
@@ -34,6 +20,8 @@ struct Post;
 struct Thread;
 struct Catalog;
 struct CatalogEntry;
+struct Boards;
+struct File;
 
 auto get_file(nlohmann::json& post, std::string const& board) -> File;
 
@@ -46,8 +34,74 @@ auto get_thread(nlohmann::json& thread, std::string const& board) -> Thread;
 
 auto get_boards(nlohmann::json& boards) -> Boards;
 
-auto dump_thread(nlohmann::json& thread, bool sanitize) -> std::string;
-auto dump_catalog(nlohmann::json& catalog, bool sanitize) -> std::string;
+auto dump_thread(nlohmann::json& thread) -> std::string;
+auto dump_catalog(nlohmann::json& catalog) -> std::string;
+
+struct File {
+    std::string name;
+    std::string ext;
+    int w;
+    int h;
+    int tn_w;
+    int tn_h;
+    long long tim;
+    int time;
+    std::string md5;
+    int size;
+
+    std::string url;
+};
+
+struct Cooldowns {
+    int threads = -1;
+    int replies = -1;
+    int images = -1;
+};
+
+struct Board {
+    std::string board;
+    std::string title;
+
+    int ws_board = -1;
+    int per_page = -1;
+    int pages = -1;
+    int max_filesize = -1;
+    int max_webm_filesize = -1;
+    int max_comment_chars = -1;
+    int max_webm_duration = -1;
+    int bump_limit = -1;
+    int image_limit = -1;
+
+    Cooldowns cooldowns;
+
+    std::string meta_description;
+    int user_ids = -1;
+    int country_flags = -1;
+    int forced_anon = -1;
+    int spoilers = -1;
+    int custom_spoilers = -1;
+    int is_archived = -1;
+    int require_subject = -1;
+    int sjis_tags = -1;
+    int oekaki = -1;
+    int troll_flags = -1;
+    int webm_audio = -1;
+    int min_image_width = -1;
+    int min_image_height = -1;
+    int math_tags = -1;
+};
+
+struct Boards {
+    /**
+	 * std::vector of Board
+	 */
+    std::vector<Board> boards;
+
+    /**
+	 * std::unordered_map of all available troll flags
+	 */
+    std::unordered_map<std::string, std::string> troll_flags_list;
+};
 
 struct Post {
     int postnumber = -1;

@@ -25,7 +25,7 @@ auto get_thread_json(std::string const& board, std::string const& thread) -> std
     }
 
     auto json = nlohmann::json::parse(download);
-    return channer::json::dump_thread(json, false);
+    return channer::json::dump_thread(json);
 }
 
 auto get_catalog(std::string const& board) -> channer::json::Catalog
@@ -58,15 +58,15 @@ auto get_catalog_json(std::string const& board) -> std::string
     }
 
     auto json = nlohmann::json::parse(download);
-    return channer::json::dump_catalog(json, false);
+    return channer::json::dump_catalog(json);
 #else
     auto mock = channer::utils::load_file("../dummy/catalog-po.json");
     auto json = nlohmann::json::parse(mock);
-    return channer::json::dump_catalog(json, false);
+    return channer::json::dump_catalog(json);
 #endif
 }
 
-auto get_boards() -> Boards
+auto get_boards() -> channer::json::Boards
 {
 #ifndef MOCKDATA
     auto website = channer::endpoints::URL_THREAD + std::string("boards") + channer::endpoints::FORMAT_JSON;
@@ -85,16 +85,16 @@ auto get_boards() -> Boards
 #endif
 }
 
-auto search_board(Board const& desired) -> std::vector<Board>
+auto search_board(channer::json::Board const& desired) -> std::vector<channer::json::Board>
 {
     auto boards = get_boards().boards;
-    std::vector<Board> found;
+    std::vector<channer::json::Board> found;
 
     std::mutex m;
 #ifndef MOCKDATA
-    std::for_each(std::execution::par_unseq, std::begin(boards), std::end(boards), [&](Board const& board) {
+    std::for_each(std::execution::par_unseq, std::begin(boards), std::end(boards), [&](channer::json::Board const& board) {
 #else
-    std::for_each(std::execution::seq, std::begin(boards), std::end(boards), [&](Board const& board) {
+    std::for_each(std::execution::seq, std::begin(boards), std::end(boards), [&](channer::json::Board const& board) {
 #endif
         auto valid = false;
 

@@ -1,15 +1,12 @@
 #ifndef _CLIENT_HPP_
 #define _CLIENT_HPP_
 
-#include <Catalog.hpp>
 #include <Constants.hpp>
 #include <Download.hpp>
 #include <HtmlUtils.hpp>
 #include <JsonUtils.hpp>
-#include <Post.hpp>
 #include <Repository.hpp>
 #include <Text.hpp>
-#include <Thread.hpp>
 #include <Utils.hpp>
 #include <functional>
 #include <json.hpp>
@@ -86,16 +83,6 @@ auto get_thread(std::string const& board, std::string const& thread, std::functi
 auto get_thread_json(std::string const& board, std::string const& thread, std::function<void(std::string)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
- * Get list of files in Thread
- *
- * @param board The board string (e.g.: "g")
- * @param thread Thread value (e.g.: 74634876)
- * @param success Success callback with a [std::vector<File>] as parameter
- * @param failure Failure callback with a [std::string] as parameter
- */
-auto get_thread_files(std::string const& board, std::string const& thread, std::function<void(std::vector<File>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
-
-/**
  * Get a Board Catalog
  *
  * @param board The board string (e.g.: "g")
@@ -114,21 +101,12 @@ auto get_catalog(std::string const& board, std::function<void(std::optional<json
 auto get_catalog_json(std::string const& board, std::function<void(std::string)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
- * Get list of files from Catalog
- *
- * @param board The board string (e.g.: "g")
- * @param success Success callback with a [std::vector<File>] as parameter
- * @param failure Failure callback with a [std::string] as parameter
- */
-auto get_catalog_files(std::string const& board, std::function<void(std::vector<File>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
-
-/**
  * Get Boards
  *
  * @param success Success callback with a [std::optional<Boards>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
-auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+auto get_boards(std::function<void(std::optional<json::Boards>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
  * Search a Board with the desired attributes
@@ -137,7 +115,7 @@ auto get_boards(std::function<void(std::optional<Boards>)>&& success, std::funct
  * @param success Success callback with a [std::vector<Board>] as parameter
  * @param failure Failure callback with a [std::string] as parameter
  */
-auto search_board(Board const& desired, std::function<void(std::vector<Board>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
+auto search_board(channer::json::Board const& desired, std::function<void(std::vector<channer::json::Board>)>&& success, std::function<void(std::string const&)>&& failure) -> void;
 
 /**
  * Download file to given path (directory path)

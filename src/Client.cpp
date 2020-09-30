@@ -29,27 +29,6 @@ auto get_thread_json(std::string const& board,
         success, failure);
 }
 
-auto get_thread_files(std::string const& board,
-                      std::string const& thread,
-                      std::function<void(std::vector<File>)>&& success,
-                      std::function<void(std::string const&)>&& failure) -> void
-{
-    execute_request<std::vector<File>>(
-        [&]() -> std::vector<File> {
-            std::vector<File> files;
-            auto thread_obj = channer::repo::get_thread(board, thread);
-
-            std::for_each(std::begin(thread_obj.posts), std::end(thread_obj.posts), [&](json::Post const& post) {
-                if (post.file.has_value()) {
-                    files.emplace_back(post.file.value());
-                }
-            });
-
-            return files;
-        },
-        success, failure);
-}
-
 auto get_catalog(std::string const& board,
                  std::function<void(std::optional<json::Catalog>)>&& success,
                  std::function<void(std::string const&)>&& failure) -> void
@@ -72,42 +51,22 @@ auto get_catalog_json(std::string const& board,
         success, failure);
 }
 
-auto get_catalog_files(std::string const& board,
-                       std::function<void(std::vector<File>)>&& success,
-                       std::function<void(std::string const&)>&& failure) -> void
-{
-    execute_request<std::vector<File>>(
-        [&]() -> std::vector<File> {
-            std::vector<File> files;
-            auto catalog_obj = channer::repo::get_catalog(board);
-
-            std::for_each(std::begin(catalog_obj.entries), std::end(catalog_obj.entries), [&](json::CatalogEntry const& entry) {
-                if (entry.file.has_value()) {
-                    files.emplace_back(entry.file.value());
-                }
-            });
-
-            return files;
-        },
-        success, failure);
-}
-
-auto get_boards(std::function<void(std::optional<Boards>)>&& success,
+auto get_boards(std::function<void(std::optional<json::Boards>)>&& success,
                 std::function<void(std::string const&)>&& failure) -> void
 {
-    execute_request<Boards>(
-        [&]() -> Boards {
+    execute_request<json::Boards>(
+        [&]() -> json::Boards {
             return channer::repo::get_boards();
         },
         success, failure);
 }
 
-auto search_board(Board const& desired,
-                  std::function<void(std::vector<Board>)>&& success,
+auto search_board(channer::json::Board const& desired,
+                  std::function<void(std::vector<channer::json::Board>)>&& success,
                   std::function<void(std::string const&)>&& failure) -> void
 {
-    execute_request<std::vector<Board>>(
-        [&]() -> std::vector<Board> {
+    execute_request<std::vector<channer::json::Board>>(
+        [&]() -> std::vector<channer::json::Board> {
             return channer::repo::search_board(desired);
         },
         success, failure);

@@ -1,11 +1,9 @@
 #ifndef _REPOSITORY_HPP_
 #define _REPOSITORY_HPP_
 
-#include <Catalog.hpp>
 #include <Constants.hpp>
 #include <Download.hpp>
 #include <JsonUtils.hpp>
-#include <Thread.hpp>
 #include <execution>
 
 namespace channer::repo
@@ -38,8 +36,8 @@ auto get_thread(std::string const& board, std::string const& thread) -> channer:
 auto get_thread_json(std::string const& board, std::string const& thread) -> std::string;
 auto get_catalog(std::string const& board) -> channer::json::Catalog;
 auto get_catalog_json(std::string const& board) -> std::string;
-auto get_boards() -> Boards;
-auto search_board(Board const& desired) -> std::vector<Board>;
+auto get_boards() -> channer::json::Boards;
+auto search_board(channer::json::Board const& desired) -> std::vector<channer::json::Board>;
 
 auto download_media(std::string const& board, long long const tim, std::string const& extension, std::string const& filename, std::filesystem::path const& path) -> bool;
 auto download_media(std::string const& board, long long const tim, std::string const& extension, std::filesystem::path const& path) -> bool;

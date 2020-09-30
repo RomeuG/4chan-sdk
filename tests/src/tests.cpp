@@ -6,7 +6,7 @@
 TEST_CASE("Get all boards")
 {
     channer::get_boards(
-        [](std::optional<Boards> arg) {
+        [](std::optional<channer::json::Boards> arg) {
             REQUIRE(arg->boards.size() == 72);
             REQUIRE(arg->troll_flags_list.size() == 23);
 
@@ -232,12 +232,12 @@ TEST_CASE("Get /po/ threads")
 
 TEST_CASE("Search a board and get correct result")
 {
-    auto desired = Board();
+    auto desired = channer::json::Board();
     desired.board = "an";
 
     channer::search_board(
         desired,
-        [](std::vector<Board> arg) {
+        [](std::vector<channer::json::Board> arg) {
             SECTION("Desired board information is correct")
             {
                 auto b = arg[0];
@@ -267,12 +267,12 @@ TEST_CASE("Search a board and get correct result")
 
 TEST_CASE("Search multiple boards and get correct results")
 {
-    auto desired = Board();
+    auto desired = channer::json::Board();
     desired.require_subject = 1;
 
     channer::search_board(
         desired,
-        [](std::vector<Board> arg) {
+        [](std::vector<channer::json::Board> arg) {
             REQUIRE(arg.size() == 3);
 
             SECTION("Search result is correct")

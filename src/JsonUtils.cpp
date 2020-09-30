@@ -187,34 +187,13 @@ auto get_boards(nlohmann::json& boards) -> Boards
     return boards_obj;
 }
 
-auto dump_thread(nlohmann::json& thread, bool sanitize) -> std::string
+auto dump_thread(nlohmann::json& thread) -> std::string
 {
-    if (sanitize) {
-        for (nlohmann::json& post : thread["posts"]) {
-            DELETE_KEY(post, "md5");
-            DELETE_KEY(post, "bumplimit");
-            DELETE_KEY(post, "imagelimit");
-            DELETE_KEY(post, "unique_ips");
-        }
-    }
-
     return thread.dump(4);
 }
 
-auto dump_catalog(nlohmann::json& catalog, bool sanitize) -> std::string
+auto dump_catalog(nlohmann::json& catalog) -> std::string
 {
-    if (sanitize) {
-        for (nlohmann::json& page : catalog) {
-            for (nlohmann::json& entry : page["threads"]) {
-                DELETE_KEY(entry, "md5");
-                DELETE_KEY(entry, "capcode");
-                DELETE_KEY(entry, "last_replies");
-                DELETE_KEY(entry, "last_last_modified");
-                DELETE_KEY(entry, "last_last_modified");
-            }
-        }
-    }
-
     return catalog.dump(4);
 }
 }
