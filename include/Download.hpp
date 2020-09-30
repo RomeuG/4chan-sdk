@@ -10,7 +10,7 @@
 
 namespace channer::req
 {
-inline auto cb_curl_txt(char* data, size_t size, size_t nmemb, std::string* writer_data) -> std::size_t
+inline auto cb_curl_txt(char* data, size_t size, size_t nmemb, std::string* writer_data) -> size_t
 {
     if (writer_data == nullptr) {
         return 0;
@@ -21,7 +21,7 @@ inline auto cb_curl_txt(char* data, size_t size, size_t nmemb, std::string* writ
     return size * nmemb;
 }
 
-inline auto cb_curl_bin(void* data, size_t size, size_t nmemb, void* writer_data) -> std::size_t
+inline auto cb_curl_bin(void* data, size_t size, size_t nmemb, void* writer_data) -> size_t
 {
     FILE* stream = (FILE*)writer_data;
     if (stream == nullptr) {

@@ -15,7 +15,6 @@ constexpr auto GET_VAL(nlohmann::json& post, std::string const& key, T& data) ->
 
 namespace channer::json
 {
-
 struct Post;
 struct Thread;
 struct Catalog;
@@ -23,10 +22,6 @@ struct CatalogEntry;
 struct Boards;
 struct Board;
 struct File;
-
-auto get_file(nlohmann::json& post, std::string const& board) -> File;
-
-auto get_post(nlohmann::json const& post, std::string const& board) -> Post;
 
 auto get_catalog(nlohmann::json& catalog) -> Catalog;
 auto get_catalog(nlohmann::json& catalog, std::string const& board) -> Catalog;
@@ -51,12 +46,16 @@ struct File {
     int size;
 
     std::string url;
+
+    static File from_json(nlohmann::json const& json, std::string const& board);
 };
 
 struct Cooldowns {
     int threads = -1;
     int replies = -1;
     int images = -1;
+
+    static Cooldowns from_json(nlohmann::json const& json, std::string const& key);
 };
 
 struct Board {
@@ -90,6 +89,8 @@ struct Board {
     int min_image_width = -1;
     int min_image_height = -1;
     int math_tags = -1;
+
+    static Board from_json(nlohmann::json& json);
 };
 
 struct Boards {
@@ -130,7 +131,7 @@ struct Post {
     int unique_ips = -1;
     int tail_size = -1;
 
-    static Post from_json(nlohmann::json const& j);
+    static Post from_json(nlohmann::json const& json, std::string const& board);
 };
 
 struct CatalogEntry {
@@ -164,7 +165,7 @@ struct CatalogEntry {
 
     int last_modified = -1;
 
-    static CatalogEntry from_json(nlohmann::json const& j);
+    static CatalogEntry from_json(nlohmann::json const& json, std::string const& board);
 };
 
 struct Catalog {
@@ -201,20 +202,15 @@ template<>
 inline auto json_get_to<std::optional<File>>(nlohmann::json const& json, std::string const& key, std::optional<File>& data, std::string extra) -> void
 {
     if (json.contains(key)) {
-        File file;
+        data = File::from_json(json, extra);
+    }
+}
 
-        json_get_to(json, "filename", file.name);
-        json_get_to(json, "ext", file.ext);
-        json_get_to(json, "w", file.w);
-        json_get_to(json, "h", file.h);
-        json_get_to(json, "tn_w", file.tn_w);
-        json_get_to(json, "tn_h", file.tn_h);
-        json_get_to(json, "tim", file.tim);
-        json_get_to(json, "time", file.time);
-        json_get_to(json, "md5", file.md5);
-        json_get_to(json, "fsize", file.size);
-
-        data = file;
+template<>
+inline auto json_get_to<Cooldowns>(nlohmann::json const& json, std::string const& key, Cooldowns& data, std::string extra) -> void
+{
+    if (json.contains(key)) {
+        data = Cooldowns::from_json(json, key);
     }
 }
 
@@ -223,215 +219,153 @@ inline auto json_get_to<std::vector<Post>>(nlohmann::json const& json, std::stri
 {
     if (json.contains(key)) {
         for (nlohmann::json const& reply : json[key]) {
-            auto post_obj = get_post(reply, extra);
+            auto post_obj = Post::from_json(reply, extra);
             data.emplace_back(post_obj);
         }
     }
 }
 
-inline Post Post::from_json(nlohmann::json const& j)
+inline Post Post::from_json(nlohmann::json const& json, std::string const& board)
 {
     Post p;
 
-    json_get_to(j, "no", p.postnumber);
-    json_get_to(j, "now", p.date);
-    json_get_to(j, "name", p.name);
-    json_get_to(j, "sub", p.subject);
+    json_get_to(json, "no", p.postnumber);
+    json_get_to(json, "now", p.date);
+    json_get_to(json, "name", p.name);
+    json_get_to(json, "sub", p.subject);
 
-    json_get_to(j, "trip", p.tripcode);
+    json_get_to(json, "trip", p.tripcode);
 
-    json_get_to(j, "filename", p.file);
+    json_get_to(json, "filename", p.file, board);
 
-    json_get_to(j, "id", p.id);
+    json_get_to(json, "id", p.id);
 
-    json_get_to(j, "com", p.text);
+    json_get_to(json, "com", p.text);
 
-    json_get_to(j, "country", p.country);
-    json_get_to(j, "country_name", p.country_name);
+    json_get_to(json, "country", p.country);
+    json_get_to(json, "country_name", p.country_name);
 
-    json_get_to(j, "bumplimit", p.bumplimit);
-    json_get_to(j, "imagelimit", p.imagelimit);
-    json_get_to(j, "archived", p.archived);
-    json_get_to(j, "archived_on", p.archived_on);
+    json_get_to(json, "bumplimit", p.bumplimit);
+    json_get_to(json, "imagelimit", p.imagelimit);
+    json_get_to(json, "archived", p.archived);
+    json_get_to(json, "archived_on", p.archived_on);
 
-    json_get_to(j, "replies", p.replies);
-    json_get_to(j, "images", p.images);
-    json_get_to(j, "unique_ips", p.unique_ips);
-    json_get_to(j, "tail_size", p.tail_size);
+    json_get_to(json, "replies", p.replies);
+    json_get_to(json, "images", p.images);
+    json_get_to(json, "unique_ips", p.unique_ips);
+    json_get_to(json, "tail_size", p.tail_size);
 
     return p;
 }
 
-inline CatalogEntry CatalogEntry::from_json(nlohmann::json const& j)
+inline CatalogEntry CatalogEntry::from_json(nlohmann::json const& json, std::string const& board)
 {
     CatalogEntry ce;
 
-    json_get_to(j, "no", ce.postnumber);
-    json_get_to(j, "sticky", ce.sticky);
-    json_get_to(j, "closed", ce.closed);
+    json_get_to(json, "no", ce.postnumber);
+    json_get_to(json, "sticky", ce.sticky);
+    json_get_to(json, "closed", ce.closed);
 
-    json_get_to(j, "now", ce.now);
-    json_get_to(j, "name", ce.name);
-    json_get_to(j, "sub", ce.sub);
+    json_get_to(json, "now", ce.now);
+    json_get_to(json, "name", ce.name);
+    json_get_to(json, "sub", ce.sub);
 
-    json_get_to(j, "com", ce.text);
+    json_get_to(json, "com", ce.text);
 
-    json_get_to(j, "filename", ce.file);
+    json_get_to(json, "filename", ce.file, board);
 
-    json_get_to(j, "resto", ce.resto);
+    json_get_to(json, "resto", ce.resto);
 
-    json_get_to(j, "id", ce.id);
-    json_get_to(j, "capcode", ce.capcode);
-    json_get_to(j, "country", ce.country);
+    json_get_to(json, "id", ce.id);
+    json_get_to(json, "capcode", ce.capcode);
+    json_get_to(json, "country", ce.country);
 
-    json_get_to(j, "bumplimit", ce.bumplimit);
-    json_get_to(j, "imagelimit", ce.imagelimit);
+    json_get_to(json, "bumplimit", ce.bumplimit);
+    json_get_to(json, "imagelimit", ce.imagelimit);
 
-    json_get_to(j, "semantic_url", ce.semantic_url);
-    json_get_to(j, "country_name", ce.country_name);
+    json_get_to(json, "semantic_url", ce.semantic_url);
+    json_get_to(json, "country_name", ce.country_name);
 
-    json_get_to(j, "replies", ce.replies);
-    json_get_to(j, "images", ce.images);
-    json_get_to(j, "omitted_posts", ce.omitted_posts);
-    json_get_to(j, "omitted_images", ce.omitted_images);
+    json_get_to(json, "replies", ce.replies);
+    json_get_to(json, "images", ce.images);
+    json_get_to(json, "omitted_posts", ce.omitted_posts);
+    json_get_to(json, "omitted_images", ce.omitted_images);
 
-    json_get_to(j, "last_replies", ce.last_replies);
+    json_get_to(json, "last_replies", ce.last_replies);
 
-    json_get_to(j, "last_modified", ce.last_modified);
+    json_get_to(json, "last_modified", ce.last_modified);
+
+    return ce;
 }
 
-inline auto get_file(nlohmann::json& post, std::string const& board) -> File
+inline File File::from_json(nlohmann::json const& json, std::string const& board)
 {
-    File file;
+    File f;
 
-    file.name = post["filename"].get<std::string>();
+    json_get_to(json, "filename", f.name);
+    json_get_to(json, "ext", f.ext);
+    json_get_to(json, "w", f.w);
+    json_get_to(json, "h", f.h);
+    json_get_to(json, "tn_w", f.tn_w);
+    json_get_to(json, "tn_h", f.tn_h);
+    json_get_to(json, "tim", f.tim);
+    json_get_to(json, "time", f.time);
+    json_get_to(json, "md5", f.md5);
+    json_get_to(json, "fsize", f.size);
 
-    GET_VAL<std::string>(post, "ext", file.ext);
+    f.url = "http://i.4cdn.org/" + board + "/" + std::to_string(f.tim) + f.ext;
 
-    GET_VAL<int>(post, "w", file.w);
-    GET_VAL<int>(post, "h", file.h);
-
-    GET_VAL<int>(post, "tn_w", file.tn_w);
-    GET_VAL<int>(post, "tn_h", file.tn_h);
-
-    GET_VAL<long long>(post, "tim", file.tim);
-    GET_VAL<int>(post, "time", file.time);
-
-    GET_VAL<std::string>(post, "md5", file.md5);
-
-    GET_VAL<int>(post, "fsize", file.size);
-
-    // build the full url
-    file.url = "http://i.4cdn.org/" + board + "/" + std::to_string(file.tim) + file.ext;
-
-    return file;
+    return f;
 }
 
-inline auto get_post(nlohmann::json const& json, std::string const& board) -> Post
+inline Board Board::from_json(nlohmann::json& json)
 {
-    //auto post = json.get<Post>();
-    auto post = Post::from_json(json);
+    Board b;
 
-    if (post.file.has_value()) {
-        post.file->url = "http://i.4cdn.org/" + board + "/" + std::to_string(post.file->tim) + post.file->ext;
-    }
+    json_get_to(json, "board", b.board);
+    json_get_to(json, "title", b.title);
 
-    return post;
+    json_get_to(json, "ws_board", b.ws_board);
+    json_get_to(json, "per_page", b.per_page);
+    json_get_to(json, "pages", b.pages);
+    json_get_to(json, "max_filesize", b.max_filesize);
+    json_get_to(json, "max_webm_filesize", b.max_webm_filesize);
+    json_get_to(json, "max_comment_chars", b.max_comment_chars);
+    json_get_to(json, "max_webm_duration", b.max_webm_duration);
+    json_get_to(json, "bump_limit", b.bump_limit);
+    json_get_to(json, "image_limit", b.image_limit);
+
+    json_get_to(json, "cooldowns", b.cooldowns);
+
+    json_get_to(json, "meta_description", b.meta_description);
+
+    json_get_to(json, "user_ids", b.user_ids);
+    json_get_to(json, "country_flags", b.country_flags);
+    json_get_to(json, "forced_anon", b.forced_anon);
+    json_get_to(json, "spoilers", b.spoilers);
+    json_get_to(json, "custom_spoilers", b.custom_spoilers);
+    json_get_to(json, "is_archived", b.is_archived);
+    json_get_to(json, "require_subject", b.require_subject);
+    json_get_to(json, "sjis_tags", b.sjis_tags);
+    json_get_to(json, "oekaki", b.oekaki);
+    json_get_to(json, "troll_flags", b.troll_flags);
+    json_get_to(json, "webm_audio", b.webm_audio);
+    json_get_to(json, "min_image_width", b.min_image_width);
+    json_get_to(json, "min_image_height", b.min_image_height);
+    json_get_to(json, "math_tags", b.math_tags);
+
+    return b;
 }
 
-inline auto get_catalog_entry(nlohmann::json& catalog, std::string const& board) -> CatalogEntry
+inline Cooldowns Cooldowns::from_json(nlohmann::json const& json, std::string const& key)
 {
-    CatalogEntry catalog_obj;
+    Cooldowns c;
 
-    GET_VAL<int>(catalog, "no", catalog_obj.postnumber);
-    GET_VAL<int>(catalog, "sticky", catalog_obj.sticky);
-    GET_VAL<int>(catalog, "closed", catalog_obj.closed);
+    json_get_to(json[key], "images", c.images);
+    json_get_to(json[key], "replies", c.replies);
+    json_get_to(json[key], "threads", c.threads);
 
-    GET_VAL<std::string>(catalog, "now", catalog_obj.now);
-    GET_VAL<std::string>(catalog, "name", catalog_obj.name);
-    GET_VAL<std::string>(catalog, "sub", catalog_obj.sub);
-
-    if (!catalog["com"].empty()) {
-        auto text_obj = channer::html::get_post_text(catalog);
-        catalog_obj.text = text_obj;
-    }
-
-    if (!catalog["filename"].empty()) {
-        auto file_obj = get_file(catalog, board);
-        catalog_obj.file = file_obj;
-    }
-
-    GET_VAL<int>(catalog, "resto", catalog_obj.resto);
-
-    GET_VAL<std::string>(catalog, "id", catalog_obj.id);
-    GET_VAL<std::string>(catalog, "capcode", catalog_obj.capcode);
-    GET_VAL<std::string>(catalog, "country", catalog_obj.country);
-
-    GET_VAL<int>(catalog, "bumplimit", catalog_obj.bumplimit);
-    GET_VAL<int>(catalog, "imagelimit", catalog_obj.imagelimit);
-
-    GET_VAL<std::string>(catalog, "semantic_url", catalog_obj.semantic_url);
-    GET_VAL<std::string>(catalog, "country_name", catalog_obj.country_name);
-
-    GET_VAL<int>(catalog, "replies", catalog_obj.replies);
-    GET_VAL<int>(catalog, "images", catalog_obj.images);
-    GET_VAL<int>(catalog, "omitted_posts", catalog_obj.omitted_posts);
-    GET_VAL<int>(catalog, "omitted_images", catalog_obj.omitted_images);
-
-    // get last replies
-    if (!catalog["last_replies"].empty()) {
-        for (nlohmann::json& reply : catalog["last_replies"]) {
-            auto post_obj = get_post(reply, board);
-            catalog_obj.last_replies.emplace_back(post_obj);
-        }
-    }
-
-    GET_VAL<int>(catalog, "last_modified", catalog_obj.last_modified);
-
-    return catalog_obj;
-}
-
-inline auto get_board(nlohmann::json& board) -> Board
-{
-    Board board_obj;
-
-    GET_VAL<std::string>(board, "board", board_obj.board);
-    GET_VAL<std::string>(board, "title", board_obj.title);
-
-    GET_VAL<int>(board, "ws_board", board_obj.ws_board);
-    GET_VAL<int>(board, "per_page", board_obj.per_page);
-    GET_VAL<int>(board, "pages", board_obj.pages);
-    GET_VAL<int>(board, "max_filesize", board_obj.max_filesize);
-    GET_VAL<int>(board, "max_webm_filesize", board_obj.max_webm_filesize);
-    GET_VAL<int>(board, "max_comment_chars", board_obj.max_comment_chars);
-    GET_VAL<int>(board, "max_webm_duration", board_obj.max_webm_duration);
-    GET_VAL<int>(board, "bump_limit", board_obj.bump_limit);
-    GET_VAL<int>(board, "image_limit", board_obj.image_limit);
-
-    if (!board["cooldowns"].empty()) {
-        board_obj.cooldowns.images = board["cooldowns"]["images"].get<int>();
-        board_obj.cooldowns.replies = board["cooldowns"]["replies"].get<int>();
-        board_obj.cooldowns.threads = board["cooldowns"]["threads"].get<int>();
-    }
-
-    GET_VAL<std::string>(board, "meta_description", board_obj.meta_description);
-
-    GET_VAL<int>(board, "user_ids", board_obj.user_ids);
-    GET_VAL<int>(board, "country_flags", board_obj.country_flags);
-    GET_VAL<int>(board, "forced_anon", board_obj.forced_anon);
-    GET_VAL<int>(board, "spoilers", board_obj.spoilers);
-    GET_VAL<int>(board, "custom_spoilers", board_obj.custom_spoilers);
-    GET_VAL<int>(board, "is_archived", board_obj.is_archived);
-    GET_VAL<int>(board, "require_subject", board_obj.require_subject);
-    GET_VAL<int>(board, "sjis_tags", board_obj.sjis_tags);
-    GET_VAL<int>(board, "oekaki", board_obj.oekaki);
-    GET_VAL<int>(board, "troll_flags", board_obj.troll_flags);
-    GET_VAL<int>(board, "webm_audio", board_obj.webm_audio);
-    GET_VAL<int>(board, "min_image_width", board_obj.min_image_width);
-    GET_VAL<int>(board, "min_image_height", board_obj.min_image_height);
-    GET_VAL<int>(board, "math_tags", board_obj.math_tags);
-
-    return board_obj;
+    return c;
 }
 
 inline auto get_thread(nlohmann::json& thread, std::string const& board) -> Thread
@@ -443,7 +377,7 @@ inline auto get_thread(nlohmann::json& thread, std::string const& board) -> Thre
     for (nlohmann::json& post : thread["posts"]) {
         Post post_info;
 
-        post_info = get_post(post, board);
+        post_info = Post::from_json(post, board);
 
         thread_obj.posts.emplace_back(post_info);
     }
@@ -459,7 +393,7 @@ inline auto get_catalog(nlohmann::json& catalog, std::string const& board) -> Ca
 
     for (nlohmann::json& page : catalog) {
         for (nlohmann::json& entry : page["threads"]) {
-            auto catalog_entry = get_catalog_entry(entry, board);
+            auto catalog_entry = CatalogEntry::from_json(entry, board);
             catalog_obj.entries.emplace_back(catalog_entry);
         }
     }
@@ -474,7 +408,7 @@ inline auto get_boards(nlohmann::json& boards) -> Boards
     boards_obj.boards.reserve(100);
 
     for (nlohmann::json& board : boards["boards"]) {
-        auto board_obj = get_board(board);
+        auto board_obj = Board::from_json(board);
         boards_obj.boards.emplace_back(board_obj);
     }
 
