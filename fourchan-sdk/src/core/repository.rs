@@ -1,28 +1,13 @@
 use crate::models::board::Boards;
 use crate::models::catalog::Catalog;
 use crate::models::thread::Thread;
+
 use crate::{FORMAT_JSON, TYPE_THREAD, URL_THREAD};
 
-#[inline(always)]
-fn url_builder_boards() -> String {
-    format!("{}{}{}", URL_THREAD, "boards", FORMAT_JSON)
-}
-
-#[inline(always)]
-fn url_builder_catalog(board: &str) -> String {
-    format!("{}{}{}{}", URL_THREAD, board, "/catalog", FORMAT_JSON)
-}
-
-#[inline(always)]
-fn url_builder_thread(board: &str, thread: &str) -> String {
-    format!(
-        "{}{}{}{}{}",
-        URL_THREAD, board, TYPE_THREAD, thread, FORMAT_JSON
-    )
-}
+use crate::core::utils;
 
 pub fn get_boards() -> Boards {
-    let url = url_builder_boards();
+    let url = utils::url_builder_boards();
 
     let client = reqwest::blocking::Client::new();
     let result = client.get(url).send().unwrap();
@@ -32,7 +17,7 @@ pub fn get_boards() -> Boards {
 }
 
 pub fn get_boards_json() -> String {
-    let url = url_builder_boards();
+    let url = utils::url_builder_boards();
 
     let client = reqwest::blocking::Client::new();
     let result = client.get(url).send().unwrap();
@@ -42,7 +27,7 @@ pub fn get_boards_json() -> String {
 }
 
 pub fn get_catalog(board: &str) -> Catalog {
-    let url = url_builder_catalog(board);
+    let url = utils::url_builder_catalog(board);
 
     let client = reqwest::blocking::Client::new();
     let result = client.get(url).send().unwrap();
@@ -52,7 +37,7 @@ pub fn get_catalog(board: &str) -> Catalog {
 }
 
 pub fn get_catalog_json(board: &str) -> String {
-    let url = url_builder_catalog(board);
+    let url = utils::url_builder_catalog(board);
 
     let client = reqwest::blocking::Client::new();
     let result = client.get(url).send().unwrap();
@@ -62,7 +47,7 @@ pub fn get_catalog_json(board: &str) -> String {
 }
 
 pub fn get_thread(board: &str, thread: &str) -> Thread {
-    let url = url_builder_thread(board, thread);
+    let url = utils::url_builder_thread(board, thread);
 
     let client = reqwest::blocking::Client::new();
     let result = client.get(url).send().unwrap();
@@ -72,7 +57,7 @@ pub fn get_thread(board: &str, thread: &str) -> Thread {
 }
 
 pub fn get_thread_json(board: &str, thread: &str) -> String {
-    let url = url_builder_thread(board, thread);
+    let url = utils::url_builder_thread(board, thread);
 
     let client = reqwest::blocking::Client::new();
     let result = client.get(url).send().unwrap();
