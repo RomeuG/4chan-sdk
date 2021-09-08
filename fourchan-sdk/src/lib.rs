@@ -3,8 +3,8 @@ extern crate lazy_static;
 
 use std::collections::HashMap;
 
-mod core;
-mod models;
+pub mod core;
+pub mod models;
 
 static URL_IMG: &str = "http://i.4cdn.org/";
 static URL_THREAD: &str = "http://a.4cdn.org/";

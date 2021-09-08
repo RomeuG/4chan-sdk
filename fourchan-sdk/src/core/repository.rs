@@ -42,8 +42,10 @@ pub fn get_catalog_json(board: &str) -> String {
     let client = reqwest::blocking::Client::new();
     let result = client.get(url).send().unwrap();
 
-    let json = result.text().unwrap();
-    json
+    let json: serde_json::Value = result.json().unwrap();
+    let pretty_printed = serde_json::to_string_pretty(&json).unwrap();
+
+    pretty_printed
 }
 
 pub fn get_thread(board: &str, thread: &str) -> Thread {
@@ -62,6 +64,8 @@ pub fn get_thread_json(board: &str, thread: &str) -> String {
     let client = reqwest::blocking::Client::new();
     let result = client.get(url).send().unwrap();
 
-    let json = result.text().unwrap();
-    json
+    let json: serde_json::Value = result.json().unwrap();
+    let pretty_printed = serde_json::to_string_pretty(&json).unwrap();
+
+    pretty_printed
 }
