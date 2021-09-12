@@ -79,7 +79,7 @@ pub fn html_parse_node(document: &Document, node: &Raw) -> Vec<TextType> {
     return vec;
 }
 
-pub fn html_parse_post(text: &str) {
+pub fn html_parse_post(text: &str) -> Vec<TextType> {
     let document = Document::from(text);
 
     // for item in &document.nodes {
@@ -89,7 +89,9 @@ pub fn html_parse_post(text: &str) {
     let body_node = document.nodes.get(2).unwrap();
     let vec_text = html_parse_node(&document, body_node);
 
-    for text in vec_text {
-        println!("{:?}", text);
-    }
+    // for text in vec_text {
+    //     println!("{:?}", text);
+    // }
+
+    return vec_text;
 }
