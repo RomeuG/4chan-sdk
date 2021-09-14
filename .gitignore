@@ -1,7 +1,1 @@
-build
-.ccls-cache
-.vscode
-4chan-sdk.code-workspace
-compile_commands.json
-.clangd
-fourchan-sdk/target
+/target
