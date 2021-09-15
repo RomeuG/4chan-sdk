@@ -10,6 +10,7 @@ pub enum TextType {
     Italics(String),
     Link(String, Option<String>),
     Quote(String),
+    Code(String),
     NewLine,
 }
 
@@ -43,6 +44,10 @@ pub fn html_parse_node(document: &Document, node: &Raw) -> Vec<TextType> {
                             vec.push(TextType::Link(t.to_string(), href));
                         } else if &parent_qual.local == "span" {
                             vec.push(TextType::Quote(t.to_string()));
+                        } else if &parent_qual.local == "pre" {
+                            let main_string = format!("    {}", &t);
+                            let treated_string = main_string.replace("<br>", "\n");
+                            vec.push(TextType::Code(treated_string));
                         } else {
                             vec.push(TextType::PlainText(t.to_string()));
                         }
@@ -62,6 +67,10 @@ pub fn html_parse_node(document: &Document, node: &Raw) -> Vec<TextType> {
                         vec.append(&mut html_parse_node(document, sibling));
                     } else if &qual.local == "span" {
                         vec.append(&mut html_parse_node(document, sibling));
+                    } else if &qual.local == "pre" {
+                        vec.push(TextType::PlainText("\n```\n".to_string()));
+                        vec.append(&mut html_parse_node(document, sibling));
+                        vec.push(TextType::PlainText("\n```\n".to_string()));
                     }
                 }
                 Data::Comment(_) => {}
@@ -81,17 +90,8 @@ pub fn html_parse_node(document: &Document, node: &Raw) -> Vec<TextType> {
 
 pub fn html_parse_post(text: &str) -> Vec<TextType> {
     let document = Document::from(text);
-
-    // for item in &document.nodes {
-    //     println!("{:?}", item);
-    // }
-
     let body_node = document.nodes.get(2).unwrap();
     let vec_text = html_parse_node(&document, body_node);
-
-    // for text in vec_text {
-    //     println!("{:?}", text);
-    // }
 
     return vec_text;
 }
