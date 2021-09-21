@@ -1,8 +1,11 @@
 use serde::{Deserialize, Serialize};
 
-pub type Boards = Vec<Board>;
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Boards {
+    pub boards: Vec<Board>,
+}
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Board {
     pub board: String,
     pub title: String,
@@ -58,14 +61,14 @@ pub struct Board {
     pub math_tags: Option<i64>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Cooldowns {
     pub threads: i64,
     pub replies: i64,
     pub images: i64,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct BoardFlags {
     #[serde(rename = "AC")]
     pub ac: Option<String>,
