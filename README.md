@@ -1,24 +1,15 @@
-4chan-sdk
-=========
+# 4chan-sdk
 
-A 4Chan SDK in C++ to interface with its API.
+A 4Chan SDK in Rust to interface with its API.
 
-Example usage
--------------
+## Example
 
-``` c++
-auto main() -> int
-{
-	Boards g_boards;
-
-	channer::get_boards(
-        [&](std::optional<Boards> arg) {
-			g_boards = arg;
-        },
-        [](std::string const& e) {
-            std::printf("Exception: %s\n", e.c_str());
-        });
-
-	return 0;
+``` rust
+fn main() {
+    let result = get_catalog_json("g");
+    match result {
+        Ok(c) => { println!("{:?}", c); },
+        Err(e) => { println!("{}", e); },
+    }
 }
 ```
