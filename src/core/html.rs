@@ -1,3 +1,4 @@
+use crate::core::error::{Error, Result};
 use html5ever::tendril::fmt::UTF8;
 use html5ever::tendril::Tendril;
 use html5ever::QualName;
@@ -88,10 +89,26 @@ pub fn html_parse_node(document: &Document, node: &Raw) -> Vec<TextType> {
     return vec;
 }
 
-pub fn html_parse_post(text: &str) -> Vec<TextType> {
+///
+/// Parse a post text that contains HTML elements, resulting in a `Vec<TextType>`.
+///
+/// # Errors
+///
+/// Returns [`HtmlParseError`](Error::HtmlParseError) if the HTML parsing returned an error.
+///
+/// # Examples
+///
+/// ```
+/// html_parse_post("example <pre>post</pre>");
+/// ```
+///
+pub fn html_parse_post(text: &str) -> Result<Vec<TextType>> {
     let document = Document::from(text);
-    let body_node = document.nodes.get(2).unwrap();
-    let vec_text = html_parse_node(&document, body_node);
-
-    return vec_text;
+    match document.nodes.get(2) {
+        Some(n) => {
+            let vec_text = html_parse_node(&document, n);
+            return Ok(vec_text);
+        }
+        None => return Err(Error::HtmlParseError),
+    }
 }

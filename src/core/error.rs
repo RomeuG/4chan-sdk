@@ -8,8 +8,14 @@ pub enum Error {
     #[error("Parsing error")]
     ParseError(#[source] reqwest::Error),
 
+    #[error("HTML parsing error")]
+    HtmlParseError,
+
     #[error("Pretty print error")]
     PrettyPrintError(#[source] serde_json::error::Error),
+
+    #[error("IO error")]
+    IoError(#[source] std::io::Error),
 
     #[error(transparent)]
     UnexpectedError(#[from] Box<dyn std::error::Error>),
