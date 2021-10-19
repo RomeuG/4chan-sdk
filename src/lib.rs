@@ -5,6 +5,7 @@ use std::collections::HashMap;
 
 pub mod core;
 pub mod models;
+pub mod traits;
 
 static URL_IMG: &str = "http://i.4cdn.org/";
 static URL_THREAD: &str = "http://a.4cdn.org/";

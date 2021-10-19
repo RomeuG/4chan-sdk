@@ -1,3 +1,5 @@
+use crate::core::error::{Error, Result};
+use crate::traits::operations::Operations;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -40,4 +42,24 @@ pub struct Post {
     pub imagelimit: Option<i64>,
     pub filedeleted: Option<i64>,
     pub trip: Option<String>,
+}
+
+impl Operations for Post {
+    fn get_file_url(&self, board: &str) -> Result<String> {
+        let tim = match self.tim {
+            Some(t) => t,
+            None => {
+                return Err(Error::UnexpectedError);
+            }
+        };
+
+        let ext = match self.ext.as_deref() {
+            Some(e) => e,
+            None => {
+                return Err(Error::UnexpectedError);
+            }
+        };
+
+        return Ok(format!("http://i.4cdn.org/{}/{}{}", board, tim, ext));
+    }
 }

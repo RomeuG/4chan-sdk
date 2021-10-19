@@ -17,6 +17,6 @@ pub enum Error {
     #[error("IO error")]
     IoError(#[source] std::io::Error),
 
-    #[error(transparent)]
-    UnexpectedError(#[from] Box<dyn std::error::Error>),
+    #[error("Unexpected error")]
+    UnexpectedError,
 }
