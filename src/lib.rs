@@ -7,14 +7,14 @@ pub mod core;
 pub mod models;
 pub mod traits;
 
-static URL_IMG: &str = "http://i.4cdn.org/";
-static URL_THREAD: &str = "http://a.4cdn.org/";
-static TYPE_THREAD: &str = "/thread/";
-static FORMAT_JSON: &str = ".json";
-static MEDIA: &str = "https://i.4cdn.org/{board}/{tim}/{file}";
+pub static URL_IMG: &str = "http://i.4cdn.org/";
+pub static URL_THREAD: &str = "http://a.4cdn.org/";
+pub static TYPE_THREAD: &str = "/thread/";
+pub static FORMAT_JSON: &str = ".json";
+pub static MEDIA: &str = "https://i.4cdn.org/{board}/{tim}/{file}";
 
 lazy_static! {
-    static ref CHAN_LIST: HashMap<&'static str, &'static str> = {
+    pub static ref CHAN_LIST: HashMap<&'static str, &'static str> = {
         let mut hm = HashMap::new();
 
         hm.insert("3", "https://boards.4channel.org/3/");
